@@ -45,8 +45,10 @@ QString PlatformInformation::osString()
 #elif defined(Q_OS_MAC) && defined(Q_WS_MAC)
     switch (QSysInfo::MacintoshVersion)
     {
-//      case QSysInfo::MV_LION:
-//          return "Mac OS X 10.7 Lion";
+        case 0xA: // QSysInfo::MV_MOUNTAINLION when it's added
+            return "Mac OS X 10.8 Mountain Lion";
+        case QSysInfo::MV_LION:
+            return "Mac OS X 10.7 Lion";
         case QSysInfo::MV_SNOWLEOPARD:
             return "Mac OS X 10.6 Snow Leopard";
         case QSysInfo::MV_LEOPARD:
