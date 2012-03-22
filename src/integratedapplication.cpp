@@ -1,4 +1,5 @@
 #include "integratedapplication.h"
+#include "integratedapplication_p.h"
 #include <QtGui>
 #if defined(Q_WS_WIN)
 #include "windows.h"
@@ -6,26 +7,6 @@
 #elif defined(Q_WS_MAC)
 #include "mac/cocoainitializer.h"
 #endif
-
-class IntegratedApplication::Private
-{
-public:
-    Private();
-    ~Private();
-
-#ifdef Q_WS_MAC
-    CocoaInitializer *cocoa;
-    QMenuBar *macAppMenuBar;
-#endif
-
-    static QString unixName;
-	static QString bundleId;
-	static QVersion applicationVersion;
-	static QVersion fileVersion;
-	static QString copyright;
-	static QString trademarks;
-	static QMap<IntegratedApplication::ApplicationUrl, QUrl> urls;
-};
 
 QString IntegratedApplication::Private::unixName = QString();
 QString IntegratedApplication::Private::bundleId = QString();
@@ -35,72 +16,91 @@ QString IntegratedApplication::Private::copyright = QString();
 QString IntegratedApplication::Private::trademarks = QString();
 QMap<IntegratedApplication::ApplicationUrl, QUrl> IntegratedApplication::Private::urls = QMap<IntegratedApplication::ApplicationUrl, QUrl>();
 
-IntegratedApplication::Private::Private()
-#ifdef Q_WS_MAC
-    : cocoa(new CocoaInitializer()), macAppMenuBar(new QMenuBar())
-#endif
-{
-#ifdef Q_WS_WIN
-    // We need this call to allow the original process to bring itself to the foreground
-    AllowSetForegroundWindow(ASFW_ANY);
-	
-	// Make the application look a little better on Windows (mostly affects toolbars and dock windows)
-    qApp->setStyle(new ExplorerStyle());
-#endif
-
-#ifdef Q_WS_MAC
-	// http://doc.qt.nokia.com/latest/qapplication.html#lastWindowClosed
-	// http://doc.qt.nokia.com/latest/qapplication.html#quitOnLastWindowClosed-prop
-	// default's true
-    qApp->setQuitOnLastWindowClosed(false);
-    qApp->setAttribute(Qt::AA_DontShowIconsInMenus);
-#endif
-
-	// Event filter for our idle timer to detect when the user appears to have gone away...
-	InactivityEventFilter *filter = new InactivityEventFilter(qApp);
-	qApp->installEventFilter(filter);
-	QObject::connect(filter, SIGNAL(resetIdleTimer(QObject*)), qApp, SIGNAL(resetIdleTimer(QObject*)));
-	
-	// Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
-	QObject::connect(qiApp, SIGNAL(fileOpenRequest(QString)), qiApp, SIGNAL(messageReceived(QString)));
-}
-
-IntegratedApplication::Private::~Private()
-{
-#ifdef Q_WS_MAC
-    if (this->cocoa)
-    {
-        delete this->cocoa;
-    }
-
-    if (this->macAppMenuBar)
-    {
-        delete this->macAppMenuBar;
-    }
-#endif
-}
-
 IntegratedApplication::IntegratedApplication(const QString &id, int &argc, char **argv, int)
     : QtSingleApplication(id, argc, argv), d(new Private())
 {
+    construct();
 }
 
 IntegratedApplication::IntegratedApplication(int &argc, char **argv, bool GUIenabled, int)
     : QtSingleApplication(argc, argv, GUIenabled), d(new Private())
 {
+    construct();
 }
 
 IntegratedApplication::IntegratedApplication(int &argc, char **argv, Type type, int)
     : QtSingleApplication(argc, argv, type), d(new Private())
 {
+    construct();
+}
+
+void IntegratedApplication::construct()
+{
+    d->integratedApplication = this;
+
+#ifdef Q_WS_WIN
+    // We need this call to allow the original process to bring itself to the foreground
+    AllowSetForegroundWindow(ASFW_ANY);
+
+    // Make the application look a little better on Windows (mostly affects toolbars and dock windows)
+    qApp->setStyle(new ExplorerStyle());
+#elif defined(Q_WS_MAC)
+    d->cocoa = new CocoaInitializer();
+    d->macAppMenuBar = new QMenuBar();
+
+    // http://doc.qt.nokia.com/latest/qapplication.html#lastWindowClosed
+    // http://doc.qt.nokia.com/latest/qapplication.html#quitOnLastWindowClosed-prop
+    // default's true
+    qApp->setQuitOnLastWindowClosed(false);
+    qApp->setAttribute(Qt::AA_DontShowIconsInMenus);
+#endif
+
+    // Event filter for our idle timer to detect when the user appears to have gone away...
+    InactivityEventFilter *filter = new InactivityEventFilter(qApp);
+    qApp->installEventFilter(filter);
+    QObject::connect(filter, SIGNAL(resetIdleTimer(QObject*)), qApp, SIGNAL(resetIdleTimer(QObject*)));
+
+    // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
+    QObject::connect(qiApp, SIGNAL(fileOpenRequest(QString)), qiApp, SIGNAL(messageReceived(QString)));
+
+    d->constructorObjc();
+
+    // For some reason the execution of our setup method MUST be delayed
+    QTimer::singleShot(1, this, SLOT(delayedConstruct()));
+}
+
+void IntegratedApplication::delayedConstruct()
+{
+    d->setupCocoaEventHandler();
 }
 
 IntegratedApplication::~IntegratedApplication()
 {
+    d->destructorObjc();
+
+    if (d->cocoa)
+        delete d->cocoa;
+
+    if (d->macAppMenuBar)
+        delete d->macAppMenuBar;
+
     if (this->d)
-    {
         delete this->d;
+}
+
+bool IntegratedApplication::event(QEvent *event)
+{
+    switch (event->type())
+    {
+    case QEvent::ApplicationActivate:
+        handleReopen();
+        break;
+    default:
+        break;
     }
+
+    event->accept();
+    return true;
 }
 
 QMenuBar* IntegratedApplication::macApplicationMenuBar() const
@@ -122,7 +122,38 @@ void IntegratedApplication::macSetDockMenu(QMenu *dockMenu)
 #endif
 }
 
-bool IntegratedApplication::dockIconClicked(bool hasVisibleWindows)
+#ifndef Q_WS_MAC
+void IntegratedApplication::setBadgeText(const QString &text)
+{
+    Q_UNUSED(text);
+}
+
+void IntegratedApplication::setBadgeText(int number)
+{
+    Q_UNUSED(number);
+}
+
+void IntegratedApplication::clearBadgeText()
+{
+}
+#endif
+
+bool IntegratedApplication::handleReopen()
+{
+    bool hasVisibleWindows = false;
+    foreach (QWidget *w, IntegratedApplication::topLevelWidgets())
+    {
+        if (w->isVisible())
+        {
+            hasVisibleWindows = true;
+            break;
+        }
+    }
+
+    return handleReopen(hasVisibleWindows);
+}
+
+bool IntegratedApplication::handleReopen(bool hasVisibleWindows)
 {
     Q_UNUSED(hasVisibleWindows);
     return true;

@@ -34,6 +34,7 @@ HEADERS += \
     dialogs/nativeprintdialog.h \
     dialogs/nativesavefiledialog.h \
     dialogs/nativesystemdialog.h \
+    widgets/itoolbarsearchwidget.h \
     win32/desktopwindowmanager.h \
     win32/integratedmainwindow.h \
     win32/jumplist.h \
@@ -51,7 +52,8 @@ HEADERS += \
     systemkeyboardreadwrite.h \
     translationutils.h \
     version.h \
-    windowmanager.h
+    windowmanager.h \
+    integratedapplication_p.h
 
 SOURCES += \
     dialogs/nativedialogs.cpp \
@@ -61,6 +63,7 @@ SOURCES += \
     dialogs/nativeprintdialog.cpp \
     dialogs/nativesavefiledialog.cpp \
     dialogs/nativesystemdialog.cpp \
+    widgets/itoolbarsearchwidget.cpp \
     win32/desktopwindowmanager.cpp \
     win32/integratedmainwindow.cpp \
     win32/jumplist.cpp \
@@ -102,12 +105,24 @@ win32 {
 macx {
     HEADERS += \
         mac/cocoainitializer.h \
-        windowmanager_mac_p.h
+        windowmanager_mac_p.h \
+        mac/icocoaeventreceiver.h \
+        mac/macloginitemsmanager.h \
+        mac/mactoolbarsearchwidget.h
+
+    OBJECTIVE_HEADERS += \
+        mac/cocoaeventlistener.h \
+        mac/machelpers.h
 
     OBJECTIVE_SOURCES += \
         mac/cocoainitializer.mm \
         integratedapplication_mac.mm \
-        windowmanager_mac.mm
+        windowmanager_mac.mm \
+        mac/cocoaeventlistener.mm \
+        mac/icocoaeventreceiver.mm \
+        mac/machelpers.mm \
+        mac/macloginitemsmanager.mm \
+        mac/mactoolbarsearchwidget.mm
 
     LIBS += -framework Cocoa # ApplicationServices & CoreFoundation
 }
@@ -152,3 +167,4 @@ unix:!symbian {
     }
     INSTALLS += target
 }
+

@@ -1,6 +1,7 @@
 #ifndef PETROULESUTILITIES_H
 #define PETROULESUTILITIES_H
 
+#include "widgets/itoolbarsearchwidget.h"
 #include "inactivityeventfilter.h"
 #include "integratedapplication.h"
 #include "linuxsysteminfo.h"

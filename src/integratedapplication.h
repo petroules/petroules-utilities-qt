@@ -8,6 +8,7 @@
 
 class QMenuBar;
 class QMenu;
+class NSEvent;
 
 class PETROULESUTILITIESSHARED_EXPORT IntegratedApplication : public QtSingleApplication
 {
@@ -49,10 +50,15 @@ public:
     IntegratedApplication(int &argc, char **argv, bool GUIenabled, int = QT_VERSION);
     IntegratedApplication(int &argc, char **argv, Type, int = QT_VERSION);
     ~IntegratedApplication();
+    bool event(QEvent *event);
     QMenuBar* macApplicationMenuBar() const;
     void macSetDockMenu(QMenu *dockMenu);
-    virtual bool dockIconClicked(bool hasVisibleWindows);
-    
+    void setBadgeText(const QString &text);
+    void setBadgeText(int number);
+    void clearBadgeText();
+    bool handleReopen();
+    virtual bool handleReopen(bool hasVisibleWindows);
+
     static void preInitialization();
     
     static QString unixName();
@@ -74,6 +80,12 @@ public:
     
 signals:
     void resetIdleTimer(QObject *object);
+
+private:
+    void construct();
+
+private slots:
+    void delayedConstruct();
 
 private:
     class Private;
