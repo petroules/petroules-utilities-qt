@@ -6,7 +6,7 @@
 # --------------------------------------------------
 
 QT += core gui network
-TARGET = platformintegration
+TARGET = globalinputhooks
 win32-msvc*:DEFINES += NOMINMAX # Needed to avoid an issue with std::numeric_limits<T>
 TEMPLATE = app
 
@@ -32,9 +32,6 @@ SOURCES += \
 FORMS += \
     mainwindow.ui
 
-RESOURCES += \
-    resources.qrc
-
 OTHER_FILES += \
     resources.rc
 
@@ -44,7 +41,6 @@ OTHER_FILES += \
 # libraries in the project build tree.
 # --------------------------------------------------
 
-win32:LIBS += -luser32
 macx:LIBS += -framework Cocoa
 
 PETROULESUTILITIES_PATH = ../../src

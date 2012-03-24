@@ -7,6 +7,7 @@
 #include "linuxsysteminfo.h"
 #include "platforminformation.h"
 #include "qversion.h"
+#include "systemkeyboardreadwrite.h"
 #include "translationutils.h"
 #include "windowmanager.h"
 #include "dialogs/nativedialogs.h"

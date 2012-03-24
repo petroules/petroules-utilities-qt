@@ -1,6 +1,7 @@
 #ifndef SYSTEMKEYBOARDREADWRITE_H
 #define SYSTEMKEYBOARDREADWRITE_H
 
+#include "petroules-utilities-global.h"
 #include <QObject>
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -9,14 +10,15 @@
 #define byte unsigned char
 #define DWORD unsigned long
 
-class SystemKeyboardReadWrite : public QObject
+class PETROULESUTILITIESSHARED_EXPORT SystemKeyboardReadWrite : public QObject
 {
     Q_OBJECT
 
 public:
     SystemKeyboardReadWrite();
     ~SystemKeyboardReadWrite();
-    bool isConnected();
+    byte* keyboardState() const;
+    bool isConnected() const;
     bool setConnected(bool state);
 
 signals:

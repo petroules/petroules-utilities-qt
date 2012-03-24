@@ -19,6 +19,7 @@ public:
 SystemKeyboardReadWrite::SystemKeyboardReadWrite()
     : QObject()
 {
+    d = new Private();
 }
 
 SystemKeyboardReadWrite::~SystemKeyboardReadWrite()
@@ -30,20 +31,12 @@ LRESULT CALLBACK SystemKeyboardReadWrite::keyboardProcedure(int nCode, WPARAM wP
 {
     if (nCode == HC_ACTION)
     {
+        KBDLLHOOKSTRUCT *pKeyboard = (KBDLLHOOKSTRUCT*)lParam;
+
         // Check for a key down press
         if (wParam == WM_KEYDOWN)
         {
-            KBDLLHOOKSTRUCT *pKeyboard = (KBDLLHOOKSTRUCT*)lParam;
-
-            // Number of keys supported
-            const int numberKeys = 256;
-            byte *keysDepressed = new byte[numberKeys];
-            if (GetKeyboardState(keysDepressed))
-            {
-                qDebug().nospace() << (char)pKeyboard->vkCode;
-
-                //emit this->keyPressed(keysDepressed, pKeyboard->vkCode);
-            }
+            qDebug().nospace() << (char)pKeyboard->vkCode;
         }
         else if (wParam == WM_KEYUP)
         {
@@ -54,10 +47,23 @@ LRESULT CALLBACK SystemKeyboardReadWrite::keyboardProcedure(int nCode, WPARAM wP
 }
 #endif
 
-bool SystemKeyboardReadWrite::isConnected()
+byte* SystemKeyboardReadWrite::keyboardState() const
+{
+    // Number of keys supported
+    const int numberKeys = 256;
+    byte *keysDepressed = new byte[numberKeys];
+    if (GetKeyboardState(keysDepressed))
+    {
+        return keysDepressed;
+    }
+
+    return NULL;
+}
+
+bool SystemKeyboardReadWrite::isConnected() const
 {
 #ifdef Q_WS_WIN
-    return this->d->keyboardHook;
+    return d->keyboardHook;
 #else
     return false;
 #endif
@@ -68,22 +74,22 @@ bool SystemKeyboardReadWrite::setConnected(bool state)
 #ifdef Q_WS_WIN
     if (state)
     {
-        if (!this->d->keyboardHook)
+        if (!d->keyboardHook)
         {
-            this->d->keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardProcedure, GetModuleHandle(NULL), 0);
+            d->keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardProcedure, GetModuleHandle(NULL), 0);
         }
     }
     else
     {
-        if (this->d->keyboardHook)
+        if (d->keyboardHook)
         {
-            UnhookWindowsHookEx(this->d->keyboardHook);
-            this->d->keyboardHook = NULL;
+            UnhookWindowsHookEx(d->keyboardHook);
+            d->keyboardHook = NULL;
         }
     }
 #else
     Q_UNUSED(state);
 #endif
 
-    return this->isConnected();
+    return isConnected();
 }

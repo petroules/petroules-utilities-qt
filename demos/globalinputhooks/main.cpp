@@ -1,5 +1,6 @@
 #include <QtGui>
 #include "mainwindow.h"
+#include "integratedapplication.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +9,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(petroules_utilities_resources);
 #endif
 
-    IntegratedApplication a("{8CA9A45E-12BC-49B5-8811-B466192C459F}", argc, argv);
+    IntegratedApplication a("{E75ACF2F-9AAF-43EB-B4C4-6FB8F1E58F56}", argc, argv);
     MainWindow w;
     w.show();
 
