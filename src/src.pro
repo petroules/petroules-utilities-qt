@@ -53,7 +53,9 @@ HEADERS += \
     translationutils.h \
     version.h \
     windowmanager.h \
-    integratedapplication_p.h
+    integratedapplication_p.h \
+    integratedmainwindow.h \
+    integratedmainwindow_p.h
 
 SOURCES += \
     dialogs/nativedialogs.cpp \
@@ -76,7 +78,8 @@ SOURCES += \
     qversion.cpp \
     systemkeyboardreadwrite.cpp \
     translationutils.cpp \
-    windowmanager.cpp
+    windowmanager.cpp \
+    integratedmainwindow.cpp
 
 OTHER_FILES += \
     petroules-utilities.rc
@@ -117,6 +120,7 @@ macx {
     OBJECTIVE_SOURCES += \
         mac/cocoainitializer.mm \
         integratedapplication_mac.mm \
+        integratedmainwindow_mac.mm \
         windowmanager_mac.mm \
         mac/cocoaeventlistener.mm \
         mac/icocoaeventreceiver.mm \
