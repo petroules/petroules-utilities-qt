@@ -96,17 +96,7 @@ void IntegratedApplication::Private::setupCocoaEventHandler()
      andEventID: kAEReopenApplication];
 }
 
-void IntegratedApplication::setBadgeText(const QString &text)
+void IntegratedApplication::Private::setBadgeText_mac(const QString &text)
 {
-    [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat: @"%s", qt_mac_QStringToNSString(text)]];
-}
-
-void IntegratedApplication::setBadgeText(int number)
-{
-    [[NSApp dockTile] setBadgeLabel: [NSString stringWithFormat: @"%d", number]];
-}
-
-void IntegratedApplication::clearBadgeText()
-{
-    [[NSApp dockTile] setBadgeLabel: @""];
+    [[NSApp dockTile] setBadgeLabel: qt_mac_QStringToNSString(text)];
 }

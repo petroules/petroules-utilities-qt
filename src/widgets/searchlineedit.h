@@ -1,21 +1,28 @@
 #ifndef MACTOOLBARSEARCHWIDGET_H
 #define MACTOOLBARSEARCHWIDGET_H
 
-#include "widgets/itoolbarsearchwidget.h"
-#include "icocoaeventreceiver.h"
+#include "petroules-utilities-global.h"
+#include <QWidget>
+#include <QMenu>
 
-class MacToolbarSearchWidget : public IToolbarSearchWidget, public ICocoaEventReceiver
+#ifdef Q_WS_MAC
+#include "mac/icocoaeventreceiver.h"
+#endif
+
+class ExplorerSearchLineEdit;
+
+class PETROULESUTILITIESSHARED_EXPORT SearchLineEdit : public QWidget
+#ifdef Q_WS_MAC
+, public ICocoaEventReceiver
+#endif
 {
     Q_OBJECT
 
 public:
-    explicit MacToolbarSearchWidget(QWidget *parent = NULL);
-    ~MacToolbarSearchWidget();
+    explicit SearchLineEdit(QWidget *parent = NULL);
     QSize sizeHint() const;
     QMenu* menu() const;
     void setMenu(QMenu *menu);
-    bool isEnabled() const;
-    void setEnabled(bool enable);
     QString text() const;
     void setText(const QString &text);
     void clear();
@@ -24,13 +31,21 @@ public:
 
 signals:
     void textChanged();
+    void searchRequested(QString);
 
 protected:
+#ifdef Q_WS_MAC
+    bool event(QEvent *event);
+#endif
     void eventReceived(const QString &name, void *object, QMap<QString, void *> *userInfo);
 
 private:
+#ifdef Q_WS_MAC
     class Private;
     Private *d;
+#else
+    ExplorerSearchLineEdit *d;
+#endif
     QString m_textBuffer;
     bool m_isTextHidden;
     QMenu *m_menu;

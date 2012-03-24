@@ -7,6 +7,8 @@ class JumpList::Private
 public:
     IShellLinkW* createShellLink(const Destination &destination) const;
     IShellItem* createShellItem(const Destination &destination) const;
+    bool isDestinationValid(const Destination &destination) const;
+    bool isDestinationValid(const QString &path) const;
 
     ICustomDestinationList* destinationList;
     IObjectArray* removedDestinations;
@@ -63,10 +65,16 @@ void JumpList::appendCustomCategory(const QString &name, const QList<Destination
     IObjectCollection* obj_collection;
     CoCreateInstance(CLSID_EnumerableObjectCollection, NULL, CLSCTX_INPROC, IID_IObjectCollection, reinterpret_cast<void**>(&obj_collection));
 
-    // TODO: make sure that the file path is valid and the file extension is registered to this application
-    // otherwise it will crash the application
     foreach (const Destination &destination, destinations)
     {
+        // Make sure that the file path is valid and the file extension
+        // is registered to this application, otherwise it will crash the application
+        if (!d->isDestinationValid(destination))
+        {
+            qWarning() << "Attempted to add a non-existent file (" << destination.file().path << ") to the jump list category" << name << ", ignoring...";
+            continue;
+        }
+
         obj_collection->AddObject(this->d->createShellItem(destination));
     }
 
@@ -251,4 +259,28 @@ IShellItem* JumpList::Private::createShellItem(const Destination &destination) c
 
     return shellItem;
 }
+
+bool JumpList::Private::isDestinationValid(const Destination &destination) const
+{
+    if (destination.isFile())
+    {
+        return isDestinationValid(destination.file().path);
+    }
+
+    return true;
+}
+
+bool JumpList::Private::isDestinationValid(const QString &path) const
+{
+    QFileInfo file(path);
+    if (!file.exists())
+    {
+        return false;
+    }
+
+    // TODO: Make sure the file extension is registered to this application
+    qDebug() << "WARNING: Did not check if the file extension of the destination was registered to this application (not yet implemented), the application may be about to crash...";
+    return true;
+}
+
 #endif

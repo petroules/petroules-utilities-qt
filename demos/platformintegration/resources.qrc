@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/images/arrow-left.png</file>
+        <file>res/images/arrow-right.png</file>
+        <file>res/images/mac-keyboard.jpg</file>
+        <file>res/images/osx-background.jpg</file>
+        <file>res/images/silverlock.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>res/check.ico</file>
+        <file>res/check.png</file>
+        <file>res/check.svg</file>
+    </qresource>
+</RCC>

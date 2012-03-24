@@ -1,6 +1,15 @@
 #include "thumbbar.h"
 #include "integratedmainwindow.h"
+#include "integratedmainwindow_p.h"
 #include "windowstaskbarintegration_includes.h"
+
+#ifdef Q_WS_WIN
+DEFINE_GUID(CLSID_TaskbarList,0x56fdf344,0xfd6d,0x11d0,0x95,0x8a,0x0,0x60,0x97,0xc9,0xa0,0x90);
+DEFINE_GUID(IID_ITaskbarList,0x56FDF342,0xFD6D,0x11d0,0x95,0x8A,0x00,0x60,0x97,0xC9,0xA0,0x90);
+DEFINE_GUID(IID_ITaskbarList2,0x602D4995,0xB13A,0x429b,0xA6,0x6E,0x19,0x35,0xE4,0x4F,0x43,0x17);
+DEFINE_GUID(IID_ITaskbarList3,0xea1afb91,0x9e28,0x4b86,0x90,0xE9,0x9e,0x9f,0x8a,0x5e,0xef,0xaf);
+DEFINE_GUID(IID_ITaskbarList4,0xc43dc798,0x95d1,0x4bea,0x90,0x30,0xbb,0x99,0xe2,0x98,0x3a,0x1a);
+#endif
 
 #ifdef Q_WS_WIN
 struct ThumbBar::ThumbButtonProperties
@@ -16,8 +25,13 @@ class ThumbBar::Private
 {
 #ifdef Q_WS_WIN
 public:
-    Private(IntegratedMainWindow *window) : window(window), buttonList(0), buttonListSize(0) { }
+    Private(IntegratedMainWindow *window) : window(window), buttonList(0), buttonListSize(0)
+    {
+        m_taskbar = window->d->m_taskbar;
+    }
+
     IntegratedMainWindow *window;
+    ITaskbarList3 *m_taskbar;
     QList<QAction*> actions;
     LPTHUMBBUTTON buttonList;
     int buttonListSize;
@@ -190,38 +204,38 @@ void ThumbBar::show()
 void ThumbBar::setButtonList()
 {
 #ifdef Q_WS_WIN
-    if (!this->d->window->m_taskbar)
+    if (!d->m_taskbar)
     {
         return;
     }
 
     // Make sure we've only got 7 buttons
-    Q_ASSERT(this->d->actions.size() <= ThumbBar::maxButtons());
-    while (this->d->actions.size() > ThumbBar::maxButtons())
+    Q_ASSERT(d->actions.size() <= ThumbBar::maxButtons());
+    while (d->actions.size() > ThumbBar::maxButtons())
     {
-        this->d->actions.removeLast();
+        d->actions.removeLast();
     }
 
     // Set the button list size and allocate memory for the native list
-    this->d->buttonListSize = this->d->actions.size();
-    this->d->buttonList = reinterpret_cast<LPTHUMBBUTTON>(malloc(sizeof(THUMBBUTTON) * this->d->buttonListSize));
+    d->buttonListSize = d->actions.size();
+    d->buttonList = reinterpret_cast<LPTHUMBBUTTON>(malloc(sizeof(THUMBBUTTON) * d->buttonListSize));
 
     // Convert the Qt buttons to native button structs
-    for (int i = 0; i < this->d->actions.size(); i++)
+    for (int i = 0; i < d->actions.size(); i++)
     {
-        QAction *action = this->d->actions.at(i);
-        this->setFlagsForAction(action, i);
+        QAction *action = d->actions.at(i);
+        setFlagsForAction(action, i);
         QObject::connect(action, SIGNAL(changed()), SLOT(updateButtonList()));
     }
 
-    this->d->window->m_taskbar->ThumbBarAddButtons(this->d->window->winId(), this->d->buttonListSize, this->d->buttonList);
+    d->m_taskbar->ThumbBarAddButtons(d->window->winId(), d->buttonListSize, d->buttonList);
 #endif
 }
 
 void ThumbBar::setFlagsForAction(QAction *action, int i)
 {
 #ifdef Q_WS_WIN
-    this->d->buttonList[i].iId = IDTB_FIRST + i;
+    d->buttonList[i].iId = IDTB_FIRST + i;
 
     // Maximum is 260 WCHARs, so we need to make sure we don't exceed that amount
     if (action->toolTip().length() > 260)
@@ -231,15 +245,15 @@ void ThumbBar::setFlagsForAction(QAction *action, int i)
 
 #ifdef Q_CC_MSVC
     // MSVC++ complains about wcscpy being unsafe so we use its preferred function
-    wcscpy_s(this->d->buttonList[i].szTip, action->toolTip().toStdWString().c_str());
+    wcscpy_s(d->buttonList[i].szTip, action->toolTip().toStdWString().c_str());
 #else
-    wcscpy(this->d->buttonList[i].szTip, action->toolTip().toStdWString().c_str());
+    wcscpy(d->buttonList[i].szTip, action->toolTip().toStdWString().c_str());
 #endif
 
     // For image lists... we're not using this since icons are so much easier to deal with
-    this->d->buttonList[i].iBitmap = 0;
+    d->buttonList[i].iBitmap = 0;
 
-    this->d->buttonList[i].hIcon = !action->isSeparator() ? action->icon().pixmap(ThumbBar::imageSize()).toWinHICON() : 0;
+    d->buttonList[i].hIcon = !action->isSeparator() ? action->icon().pixmap(ThumbBar::imageSize()).toWinHICON() : 0;
 
     THUMBBUTTONMASK mask = static_cast<THUMBBUTTONMASK>(0);
     if (!action->icon().isNull() && !action->isSeparator())
@@ -254,11 +268,11 @@ void ThumbBar::setFlagsForAction(QAction *action, int i)
         mask = static_cast<THUMBBUTTONMASK>(mask | THB_TOOLTIP);
     }
 
-    this->d->buttonList[i].dwMask = mask;
+    d->buttonList[i].dwMask = mask;
 
     THUMBBUTTONFLAGS flags = action->isEnabled() && !action->isSeparator() ? THBF_ENABLED : THBF_DISABLED;
 
-    ThumbButtonProperties *props = this->d->properties.value(action, new ThumbButtonProperties());
+    ThumbButtonProperties *props = d->properties.value(action, new ThumbButtonProperties());
     if (props->dismissOnClick && !action->isSeparator())
     {
         flags = static_cast<THUMBBUTTONFLAGS>(mask | THBF_DISMISSONCLICK);
@@ -279,7 +293,7 @@ void ThumbBar::setFlagsForAction(QAction *action, int i)
         flags = static_cast<THUMBBUTTONFLAGS>(mask | THBF_NONINTERACTIVE);
     }
 
-    this->d->buttonList[i].dwFlags = flags;
+    d->buttonList[i].dwFlags = flags;
 #else
     Q_UNUSED(action);
     Q_UNUSED(i);
@@ -293,16 +307,16 @@ void ThumbBar::setFlagsForAction(QAction *action, int i)
 void ThumbBar::updateButtonList()
 {
 #ifdef Q_WS_WIN
-    if (!this->d->window->m_taskbar)
+    if (!d->m_taskbar)
     {
         return;
     }
 
-    for (int i = 0; i < this->d->buttonListSize; i++)
+    for (int i = 0; i < d->buttonListSize; i++)
     {
-        this->setFlagsForAction(this->d->actions.at(i), i);
+        this->setFlagsForAction(d->actions.at(i), i);
     }
 
-    this->d->window->m_taskbar->ThumbBarUpdateButtons(this->d->window->winId(), this->d->buttonListSize, this->d->buttonList);
+    d->m_taskbar->ThumbBarUpdateButtons(d->window->winId(), d->buttonListSize, d->buttonList);
 #endif
 }

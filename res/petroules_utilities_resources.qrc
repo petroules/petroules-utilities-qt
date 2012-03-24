@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>app.icns</file>
+        <file>app.ico</file>
+        <file>app.svg</file>
+        <file>images/esf-border.png</file>
+        <file>images/esf-clear-active.png</file>
+        <file>images/esf-clear-hover.png</file>
+        <file>images/esf-clear.png</file>
+        <file>images/esf-search.png</file>
+    </qresource>
+</RCC>

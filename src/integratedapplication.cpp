@@ -60,6 +60,7 @@ void IntegratedApplication::construct()
     qApp->installEventFilter(filter);
     QObject::connect(filter, SIGNAL(resetIdleTimer(QObject*)), qApp, SIGNAL(resetIdleTimer(QObject*)));
 
+#ifdef Q_WS_MAC
     // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
     QObject::connect(qiApp, SIGNAL(fileOpenRequest(QString)), qiApp, SIGNAL(messageReceived(QString)));
 
@@ -67,15 +68,19 @@ void IntegratedApplication::construct()
 
     // For some reason the execution of our setup method MUST be delayed
     QTimer::singleShot(1, this, SLOT(delayedConstruct()));
+#endif
 }
 
 void IntegratedApplication::delayedConstruct()
 {
+#ifdef Q_WS_MAC
     d->setupCocoaEventHandler();
+#endif
 }
 
 IntegratedApplication::~IntegratedApplication()
 {
+#ifdef Q_WS_MAC
     d->destructorObjc();
 
     if (d->cocoa)
@@ -83,6 +88,7 @@ IntegratedApplication::~IntegratedApplication()
 
     if (d->macAppMenuBar)
         delete d->macAppMenuBar;
+#endif
 
     if (this->d)
         delete this->d;
@@ -99,8 +105,7 @@ bool IntegratedApplication::event(QEvent *event)
         break;
     }
 
-    event->accept();
-    return true;
+    return QtSingleApplication::event(event);
 }
 
 QMenuBar* IntegratedApplication::macApplicationMenuBar() const
@@ -122,21 +127,24 @@ void IntegratedApplication::macSetDockMenu(QMenu *dockMenu)
 #endif
 }
 
-#ifndef Q_WS_MAC
 void IntegratedApplication::setBadgeText(const QString &text)
 {
+#ifdef Q_WS_MAC
+    d->setBadgeText_mac(text);
+#else
     Q_UNUSED(text);
+#endif
 }
 
 void IntegratedApplication::setBadgeText(int number)
 {
-    Q_UNUSED(number);
+    setBadgeText(QString::number(number));
 }
 
 void IntegratedApplication::clearBadgeText()
 {
+    setBadgeText(QString());
 }
-#endif
 
 bool IntegratedApplication::handleReopen()
 {

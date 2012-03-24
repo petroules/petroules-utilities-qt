@@ -1,25 +1,29 @@
 #ifndef INTEGRATEDAPPLICATION_P_H
 #define INTEGRATEDAPPLICATION_P_H
 
-#include "mac/cocoainitializer.h"
 #include "integratedapplication.h"
+#ifdef Q_WS_MAC
+#include "mac/cocoainitializer.h"
 
 class objc_object;
+#endif
 
 class IntegratedApplication::Private
 {
 public:
+#ifdef Q_WS_MAC
     void constructorObjc();
     void destructorObjc();
     void setupCocoaEventHandler();
+    void setBadgeText_mac(const QString &text);
 
-#ifdef Q_WS_MAC
     CocoaInitializer *cocoa;
     QMenuBar *macAppMenuBar;
     objc_object *eventMonitor;
     objc_object *dockIconClickEventHandler;
-    IntegratedApplication *integratedApplication;
 #endif
+
+    IntegratedApplication *integratedApplication;
 
     static QString unixName;
     static QString bundleId;

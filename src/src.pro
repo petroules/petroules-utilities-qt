@@ -34,9 +34,8 @@ HEADERS += \
     dialogs/nativeprintdialog.h \
     dialogs/nativesavefiledialog.h \
     dialogs/nativesystemdialog.h \
-    widgets/itoolbarsearchwidget.h \
+    widgets/searchlineedit.h \
     win32/desktopwindowmanager.h \
-    win32/integratedmainwindow.h \
     win32/jumplist.h \
     win32/jumplists_win32.h \
     win32/thumbbar.h \
@@ -54,8 +53,9 @@ HEADERS += \
     version.h \
     windowmanager.h \
     integratedapplication_p.h \
+    integratedmainwindow_p.h \
     integratedmainwindow.h \
-    integratedmainwindow_p.h
+    widgets/explorersearchlineedit.h
 
 SOURCES += \
     dialogs/nativedialogs.cpp \
@@ -65,9 +65,8 @@ SOURCES += \
     dialogs/nativeprintdialog.cpp \
     dialogs/nativesavefiledialog.cpp \
     dialogs/nativesystemdialog.cpp \
-    widgets/itoolbarsearchwidget.cpp \
+    widgets/searchlineedit.cpp \
     win32/desktopwindowmanager.cpp \
-    win32/integratedmainwindow.cpp \
     win32/jumplist.cpp \
     win32/thumbbar.cpp \
     win32/windowsfileregistration.cpp \
@@ -79,7 +78,11 @@ SOURCES += \
     systemkeyboardreadwrite.cpp \
     translationutils.cpp \
     windowmanager.cpp \
-    integratedmainwindow.cpp
+    integratedmainwindow.cpp \
+    widgets/explorersearchlineedit.cpp
+
+RESOURCES += \
+    ../res/petroules_utilities_resources.qrc
 
 OTHER_FILES += \
     petroules-utilities.rc
@@ -110,8 +113,7 @@ macx {
         mac/cocoainitializer.h \
         windowmanager_mac_p.h \
         mac/icocoaeventreceiver.h \
-        mac/macloginitemsmanager.h \
-        mac/mactoolbarsearchwidget.h
+        mac/macloginitemsmanager.h
 
     OBJECTIVE_HEADERS += \
         mac/cocoaeventlistener.h \
@@ -126,7 +128,7 @@ macx {
         mac/icocoaeventreceiver.mm \
         mac/machelpers.mm \
         mac/macloginitemsmanager.mm \
-        mac/mactoolbarsearchwidget.mm
+        widgets/searchlineedit_mac.mm
 
     LIBS += -framework Cocoa # ApplicationServices & CoreFoundation
 }
@@ -171,4 +173,3 @@ unix:!symbian {
     }
     INSTALLS += target
 }
-

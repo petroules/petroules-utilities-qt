@@ -5,9 +5,28 @@
 // https://developer.apple.com/library/mac/#documentation/General/Conceptual/MOSXAppProgrammingGuide/FullScreenApp/FullScreenApp.html
 // https://bugreports.qt.nokia.com/browse/QTBUG-21607
 
+bool IntegratedMainWindow::Private::isNativeFullScreenEnabled_mac() const
+{
+    return [qt_mac_windowForWidget(window) collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary;
+}
+
 void IntegratedMainWindow::Private::setNativeFullScreenEnabled_mac(bool enable)
 {
-    [qt_mac_windowForWidget(window) setCollectionBehavior: (enable ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorDefault)];
+    // Make sure that we're not in fullscreen and that we're actually changing the value
+    if (!isNativeFullScreen_mac() && isNativeFullScreenEnabled_mac() != enable)
+    {
+        NSWindowCollectionBehavior behavior = [qt_mac_windowForWidget(window) collectionBehavior];
+        if (enable)
+        {
+            behavior |= NSWindowCollectionBehaviorFullScreenPrimary;
+        }
+        else
+        {
+            behavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+        }
+
+        [qt_mac_windowForWidget(window) setCollectionBehavior: behavior];
+    }
 }
 
 bool IntegratedMainWindow::Private::isNativeFullScreen_mac() const
