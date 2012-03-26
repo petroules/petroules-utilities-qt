@@ -51,7 +51,7 @@ void WindowManager::updateTopMostFlags(QWidget *const window, bool topMost)
     }
     else
     {
-        window->overrideWindowFlags(flags ^ Qt::WindowStaysOnTopHint);
+        window->overrideWindowFlags(flags & ~Qt::WindowStaysOnTopHint);
     }
 }
 

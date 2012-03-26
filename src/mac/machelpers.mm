@@ -30,5 +30,5 @@ NSString* qt_mac_QStringToNSString(const QString &string)
 
 NSWindow* qt_mac_windowForWidget(const QWidget *widget)
 {
-    return [(NSView*)widget->winId() window];
+    return [reinterpret_cast<NSView*>(widget->winId()) window];
 }

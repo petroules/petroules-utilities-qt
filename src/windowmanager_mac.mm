@@ -1,9 +1,10 @@
 #include "windowmanager_mac_p.h"
+#include "mac/machelpers.h"
 
 #ifdef Q_WS_MAC
 void WindowManager::setTopMostMac(QWidget *const window, bool topMost)
 {
-    [[reinterpret_cast<NSView*>(window->winId()) window] setLevel : (topMost ? NSPopUpMenuWindowLevel : NSNormalWindowLevel)];
+    [qt_mac_windowForWidget(window) setLevel: (topMost ? NSPopUpMenuWindowLevel : NSNormalWindowLevel)];
     WindowManager::updateTopMostFlags(window, topMost);
 }
 

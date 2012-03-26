@@ -4,7 +4,7 @@
 #include "petroules-utilities-global.h"
 #include "inactivityeventfilter.h"
 #include "qversion.h"
-#include "qtsingleapplication.h"
+#include <QtSingleApplication>
 
 class QMenuBar;
 class QMenu;
