@@ -1,4 +1,4 @@
-!include(../../petroules-utilities.pri):error(petroules-utilities.pri is missing)
+!include(../../petroules-utilities.pri):error(../../petroules-utilities.pri is missing)
 
 # --------------------------------------------------
 # This section contains project configuration

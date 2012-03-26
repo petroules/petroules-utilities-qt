@@ -1,6 +1,11 @@
 !isEmpty(PETROULES_PRI_INCLUDED):error("petroules.pri already included")
 PETROULES_PRI_INCLUDED = 1
 
+# Shh... secret and private :)
+win32:_PETROULES_UTILITIES_LIBS_ += -lcomctl32 -lole32 -lgdi32 -lshlwapi
+win32-msvc*:_PETROULES_UTILITIES_LIBS_ += -luser32 -ladvapi32 -lshlwapi -lshell32
+macx:_PETROULES_UTILITIES_LIBS_ += -framework Cocoa # ApplicationServices & CoreFoundation
+
 defineReplace(formatpath) {
     path = $$1
 
@@ -38,6 +43,13 @@ defineTest(includeLib) {
 
     isEqual(lib, petroules-utilities) {
         !build_pass:message("Including extra headers for QtSingleApplication...")
+
+        isEqual(mode, static) {
+            DEFINES += PETROULESUTILITIES_STATIC
+            export(DEFINES)
+            win32:LIBS += $$_PETROULES_UTILITIES_LIBS_
+            win32:export(LIBS)
+        }
 
         # We have to make sure we include the QtSingleApplication headers
         # path because it will get indirectly included from THIS project

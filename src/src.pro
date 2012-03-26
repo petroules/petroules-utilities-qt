@@ -1,3 +1,5 @@
+!include(../petroules-utilities.pri):error(../petroules-utilities.pri is missing)
+
 # --------------------------------------------------
 # This section contains project configuration
 # directives such as the required Qt modules, the
@@ -94,12 +96,10 @@ OTHER_FILES += \
 # libraries in the project build tree.
 # --------------------------------------------------
 
+LIBS += $$_PETROULES_UTILITIES_LIBS_
+
 win32 {
-    DEFINES += WINVER=0x501
-    LIBS += -lcomctl32 -lole32 -lgdi32 -lshlwapi
-    win32-msvc* {
-        LIBS += -luser32 -ladvapi32 -lshlwapi -lshell32
-    }
+    DEFINES += WINVER=0x501    
 
     HEADERS += \
         win32/explorerstyle.h
@@ -130,8 +130,6 @@ macx {
         mac/machelpers.mm \
         mac/macloginitemsmanager.mm \
         widgets/searchlineedit_mac.mm
-
-    LIBS += -framework Cocoa # ApplicationServices & CoreFoundation
 }
 
 x11 {
@@ -149,7 +147,7 @@ win32|macx|x11 {
 # as Windows resource files and icons for Mac OS X
 # --------------------------------------------------
 
-win32:RC_FILE = $${TARGET}.rc
+win32:CONFIG(shared, static|shared|plugin):RC_FILE = $${TARGET}.rc
 
 # --------------------------------------------------
 # This section contains commands for deployment to
@@ -159,26 +157,26 @@ win32:RC_FILE = $${TARGET}.rc
 # Set this to a reasonable value for your project - if you want to make it part of Qt itself,
 # and it is a style plugin for example, this should be set to $$[QT_INSTALL_PLUGINS]/styles,
 # otherwise it should be set to a subdirectory of your application's directory containing plugins
-# CONFIG(plugin):DESTDIR =
+# CONFIG(plugin, static|shared|plugin):DESTDIR =
 
 symbian {
     # Load predefined include paths (e.g. QT_PLUGINS_BASE_DIR) to be used in the pro-files
-    CONFIG(plugin):load(data_caging_paths)
+    CONFIG(plugin, static|shared|plugin):load(data_caging_paths)
 
-    CONFIG(shared)|CONFIG(plugin) {
+    CONFIG(shared, static|shared|plugin)|CONFIG(plugin, static|shared|plugin) {
         MMP_RULES += EXPORTUNFROZEN
         TARGET.UID3 = 0xE3A63D34
         TARGET.CAPABILITY =
         TARGET.EPOCALLOWDLLDATA = 1
     }
 
-    CONFIG(plugin) {
+    CONFIG(plugin, static|shared|plugin) {
         pluginDeploy.sources = $${TARGET}.dll
         pluginDeploy.path = $$QT_PLUGINS_BASE_DIR/$${TARGET}
         DEPLOYMENT += pluginDeploy
     }
 
-    CONFIG(shared) {
+    CONFIG(shared, static|shared|plugin) {
         addFiles.sources = $${TARGET}.dll
         addFiles.path = !:/sys/bin
         DEPLOYMENT += addFiles
