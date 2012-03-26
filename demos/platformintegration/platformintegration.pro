@@ -1,3 +1,5 @@
+!include(../../petroules-utilities.pri):error(petroules-utilities.pri is missing)
+
 # --------------------------------------------------
 # This section contains project configuration
 # directives such as the required Qt modules, the
@@ -47,24 +49,8 @@ OTHER_FILES += \
 win32:LIBS += -luser32
 macx:LIBS += -framework Cocoa
 
-PETROULESUTILITIES_PATH = ../../src
-QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsingleapplication/src
-
 # Petroules Utilities library
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/release/ -lpetroules-utilities
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/debug/ -lpetroules-utilities
-else:symbian: LIBS += -lpetroules-utilities
-else:unix: LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/ -lpetroules-utilities
-
-# We have to make sure we include the QtSingleApplication headers
-# path because it will get indirectly included from THIS project
-INCLUDEPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
-DEPENDPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/release/petroules-utilities.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/debug/petroules-utilities.lib
-else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilities.a
+includeLib(../../src, petroules-utilities, static)
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such

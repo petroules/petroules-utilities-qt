@@ -5,11 +5,12 @@
 # be defined.
 # --------------------------------------------------
 
-macx:CONFIG += staticlib
 TEMPLATE = lib
+CONFIG += static
+TARGET = petroules-utilities
+
 DEFINES += PETROULESUTILITIES_LIBRARY
 win32-msvc*:DEFINES += NOMINMAX # Needed to avoid an issue with std::numeric_limits<T>
-TARGET = petroules-utilities
 
 # --------------------------------------------------
 # This section contains all the main code/resource
@@ -26,7 +27,7 @@ TARGET = petroules-utilities
 PRECOMPILED_HEADER += stable.h
 
 HEADERS += \
-    petroules-utilities-global.h \
+    $${TARGET}-global.h \
     dialogs/nativedialogs.h \
     dialogs/nativefiledialog.h \
     dialogs/nativeopendirectorydialog.h \
@@ -47,7 +48,7 @@ HEADERS += \
     platforminformation.h \
     qversion.h \
     stable.h \
-    petroules-utilities.h \
+    $${TARGET}.h \
     systemkeyboardreadwrite.h \
     translationutils.h \
     version.h \
@@ -85,7 +86,7 @@ RESOURCES += \
     ../res/petroules_utilities_resources.qrc
 
 OTHER_FILES += \
-    petroules-utilities.rc
+    $${TARGET}.rc
 
 # --------------------------------------------------
 # This section contains all libraries that the
@@ -133,11 +134,11 @@ macx {
     LIBS += -framework Cocoa # ApplicationServices & CoreFoundation
 }
 
-unix:!macx {
+x11 {
     SOURCES += windowmanager_x11.cpp
 }
 
-win32|macx|unix {
+win32|macx|x11 {
     !include(../lib/qtsingleapplication/src/qtsingleapplication.pri) {
         error(Could not find the qtsingleapplication.pri file!)
     }
@@ -148,21 +149,40 @@ win32|macx|unix {
 # as Windows resource files and icons for Mac OS X
 # --------------------------------------------------
 
-win32:RC_FILE = petroules-utilities.rc
+win32:RC_FILE = $${TARGET}.rc
 
 # --------------------------------------------------
 # This section contains commands for deployment to
 # various platforms, especially mobile devices
 # --------------------------------------------------
 
+# Set this to a reasonable value for your project - if you want to make it part of Qt itself,
+# and it is a style plugin for example, this should be set to $$[QT_INSTALL_PLUGINS]/styles,
+# otherwise it should be set to a subdirectory of your application's directory containing plugins
+# CONFIG(plugin):DESTDIR =
+
 symbian {
-    MMP_RULES += EXPORTUNFROZEN
-    TARGET.UID3 = 0xE3A63D34
-    TARGET.CAPABILITY =
-    TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = petroules-utilities.dll
-    addFiles.path = !:/sys/bin
-    DEPLOYMENT += addFiles
+    # Load predefined include paths (e.g. QT_PLUGINS_BASE_DIR) to be used in the pro-files
+    CONFIG(plugin):load(data_caging_paths)
+
+    CONFIG(shared)|CONFIG(plugin) {
+        MMP_RULES += EXPORTUNFROZEN
+        TARGET.UID3 = 0xE3A63D34
+        TARGET.CAPABILITY =
+        TARGET.EPOCALLOWDLLDATA = 1
+    }
+
+    CONFIG(plugin) {
+        pluginDeploy.sources = $${TARGET}.dll
+        pluginDeploy.path = $$QT_PLUGINS_BASE_DIR/$${TARGET}
+        DEPLOYMENT += pluginDeploy
+    }
+
+    CONFIG(shared) {
+        addFiles.sources = $${TARGET}.dll
+        addFiles.path = !:/sys/bin
+        DEPLOYMENT += addFiles
+    }
 }
 
 unix:!symbian {
