@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += platformintegration globalinputhooks
+SUBDIRS += platformintegration globalinputhooks \
+    windowsystem

@@ -25,14 +25,14 @@ TEMPLATE = app
 # --------------------------------------------------
 
 HEADERS += \
-    mainwindow.h
+    platformintegrationwindow.h
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    platformintegrationwindow.cpp
 
 FORMS += \
-    mainwindow.ui
+    platformintegrationwindow.ui
 
 RESOURCES += \
     resources.qrc

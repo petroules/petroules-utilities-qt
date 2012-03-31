@@ -129,9 +129,8 @@ bool DesktopWindowManager::enableComposition(bool enable)
  */
 bool DesktopWindowManager::setBlurBehindEnabled(QWidget *widget, bool enable)
 {
-    Q_ASSERT(widget);
 #ifdef Q_WS_WIN
-    if (resolveLibs())
+    if (widget && resolveLibs())
     {
         DWM_BLURBEHIND bb = { 0 };
         bb.fEnable = enable;
@@ -147,6 +146,9 @@ bool DesktopWindowManager::setBlurBehindEnabled(QWidget *widget, bool enable)
             return true;
         }
     }
+#else
+    Q_UNUSED(widget);
+    Q_UNUSED(enable);
 #endif
     return false;
 }
@@ -165,17 +167,9 @@ bool DesktopWindowManager::setBlurBehindEnabled(QWidget *widget, bool enable)
   */
 bool DesktopWindowManager::extendFrameIntoClientArea(QWidget *widget, int left, int top, int right, int bottom)
 {
-    if (!widget || !widget->isWindow())
-        return false;
-
-    Q_UNUSED(left);
-    Q_UNUSED(top);
-    Q_UNUSED(right);
-    Q_UNUSED(bottom);
-
     bool result = false;
 #ifdef Q_WS_WIN
-    if (resolveLibs())
+    if (widget && widget->isWindow() && resolveLibs())
     {
         QLibrary dwmLib(QString::fromAscii("dwmapi"));
 
@@ -189,7 +183,12 @@ bool DesktopWindowManager::extendFrameIntoClientArea(QWidget *widget, int left, 
 
         widget->setAttribute(Qt::WA_TranslucentBackground, result);
     }
-
+#else
+    Q_UNUSED(widget);
+    Q_UNUSED(left);
+    Q_UNUSED(top);
+    Q_UNUSED(right);
+    Q_UNUSED(bottom);
 #endif
     return result;
 }

@@ -58,7 +58,9 @@ HEADERS += \
     integratedapplication_p.h \
     integratedmainwindow_p.h \
     integratedmainwindow.h \
-    widgets/explorersearchlineedit.h
+    widgets/explorersearchlineedit.h \
+    nativewindowinfo.h \
+    nativewindow.h
 
 SOURCES += \
     dialogs/nativedialogs.cpp \
@@ -82,7 +84,9 @@ SOURCES += \
     translationutils.cpp \
     windowmanager.cpp \
     integratedmainwindow.cpp \
-    widgets/explorersearchlineedit.cpp
+    widgets/explorersearchlineedit.cpp \
+    nativewindowinfo.cpp \
+    nativewindow.cpp
 
 RESOURCES += \
     ../res/petroules_utilities_resources.qrc
@@ -137,8 +141,12 @@ x11 {
 }
 
 win32|macx|x11 {
-    !include(../lib/qtsingleapplication/src/qtsingleapplication.pri) {
+    !include(../lib/qtsolutions/qtsingleapplication/src/qtsingleapplication.pri) {
         error(Could not find the qtsingleapplication.pri file!)
+    }
+
+    !include(../lib/qtsolutions/qtpropertybrowser/src/qtpropertybrowser.pri) {
+        error(Could not find the qtpropertybrowser.pri file!)
     }
 }
 

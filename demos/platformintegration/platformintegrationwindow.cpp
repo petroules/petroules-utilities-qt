@@ -1,11 +1,11 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "platformintegrationwindow.h"
+#include "ui_platformintegrationwindow.h"
 #include <limits>
 #include "widgets/searchlineedit.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+PlatformIntegrationWindow::PlatformIntegrationWindow(QWidget *parent) :
     IntegratedMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::PlatformIntegrationWindow)
 {
     this->ui->setupUi(this);
     this->updateState();
@@ -124,12 +124,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setPlatformVisibility();
 }
 
-MainWindow::~MainWindow()
+PlatformIntegrationWindow::~PlatformIntegrationWindow()
 {
     delete this->ui;
 }
 
-void MainWindow::setPlatformVisibility()
+void PlatformIntegrationWindow::setPlatformVisibility()
 {
     // Set the features page for the current platform
 #ifdef Q_WS_WIN
@@ -139,13 +139,13 @@ void MainWindow::setPlatformVisibility()
 #endif
 }
 
-void MainWindow::updateState()
+void PlatformIntegrationWindow::updateState()
 {
     this->ui->setIconicThumbnailPushButton->setEnabled(this->ui->enableLivePreviewCheckBox->isChecked());
     this->ui->clearIconicThumbnailPushButton->setEnabled(this->ui->enableLivePreviewCheckBox->isChecked());
 }
 
-QPixmap MainWindow::sendPreview()
+QPixmap PlatformIntegrationWindow::sendPreview()
 {
     if (ui->iconicThumbnailLabel->pixmap())
     {
@@ -162,7 +162,7 @@ QPixmap MainWindow::sendPreview()
     The pixmap returned by this method will only be used if setIconicPreviewEnabled(true) is
     called, otherwise Windows will simply generate a pixmap of the window contents (the default).
  */
-QPixmap MainWindow::sendThumbnail()
+QPixmap PlatformIntegrationWindow::sendThumbnail()
 {
     if (ui->iconicThumbnailLabel->pixmap())
     {
@@ -173,7 +173,7 @@ QPixmap MainWindow::sendThumbnail()
     return IntegratedMainWindow::sendThumbnail();
 }
 
-void MainWindow::on_setIconicThumbnailPushButton_clicked()
+void PlatformIntegrationWindow::on_setIconicThumbnailPushButton_clicked()
 {
     QPixmap pix(":/res/images/osx-background.jpg");
     this->ui->iconicThumbnailLabel->setPixmap(pix);
@@ -181,14 +181,14 @@ void MainWindow::on_setIconicThumbnailPushButton_clicked()
     this->statusBar()->showMessage(tr("Iconic thumbnail set"), 5000);
 }
 
-void MainWindow::on_clearIconicThumbnailPushButton_clicked()
+void PlatformIntegrationWindow::on_clearIconicThumbnailPushButton_clicked()
 {
     this->ui->iconicThumbnailLabel->setPixmap(QPixmap());
     this->invalidateThumbnail();
     this->statusBar()->showMessage(tr("Iconic thumbnail cleared"), 5000);
 }
 
-void MainWindow::on_enableLivePreviewCheckBox_toggled(bool checked)
+void PlatformIntegrationWindow::on_enableLivePreviewCheckBox_toggled(bool checked)
 {
     this->ui->setIconicThumbnailPushButton->setEnabled(checked);
     this->ui->clearIconicThumbnailPushButton->setEnabled(checked);
@@ -196,7 +196,7 @@ void MainWindow::on_enableLivePreviewCheckBox_toggled(bool checked)
     this->statusBar()->showMessage(tr("Live preview %1").arg(checked ? "enabled" : "disabled"), 5000);
 }
 
-void MainWindow::thumbBarButtonClicked()
+void PlatformIntegrationWindow::thumbBarButtonClicked()
 {
     //ThumbBarButton *button = qobject_cast<ThumbBarButton*>(sender());
     void *button = 0;
@@ -206,7 +206,7 @@ void MainWindow::thumbBarButtonClicked()
     }
 }
 
-void MainWindow::on_overlayIcon1PushButton_clicked()
+void PlatformIntegrationWindow::on_overlayIcon1PushButton_clicked()
 {
     if (this->setOverlayIcon(this->ui->overlayIcon1PushButton->icon()))
     {
@@ -214,7 +214,7 @@ void MainWindow::on_overlayIcon1PushButton_clicked()
     }
 }
 
-void MainWindow::on_overlayIcon2PushButton_clicked()
+void PlatformIntegrationWindow::on_overlayIcon2PushButton_clicked()
 {
     if (this->setOverlayIcon(this->ui->overlayIcon2PushButton->icon()))
     {
@@ -222,7 +222,7 @@ void MainWindow::on_overlayIcon2PushButton_clicked()
     }
 }
 
-void MainWindow::on_overlayIcon3PushButton_clicked()
+void PlatformIntegrationWindow::on_overlayIcon3PushButton_clicked()
 {
     if (this->setOverlayIcon(this->ui->overlayIcon3PushButton->icon()))
     {
@@ -230,7 +230,7 @@ void MainWindow::on_overlayIcon3PushButton_clicked()
     }
 }
 
-void MainWindow::on_clearOverlayIconPushButton_clicked()
+void PlatformIntegrationWindow::on_clearOverlayIconPushButton_clicked()
 {
     if (this->clearOverlayIcon())
     {
@@ -238,7 +238,7 @@ void MainWindow::on_clearOverlayIconPushButton_clicked()
     }
 }
 
-void MainWindow::on_progressStateComboBox_currentIndexChanged(int index)
+void PlatformIntegrationWindow::on_progressStateComboBox_currentIndexChanged(int index)
 {
     TaskbarProgressState state = NoProgress;
 
@@ -269,7 +269,7 @@ void MainWindow::on_progressStateComboBox_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_progressHorizontalSlider_sliderMoved(int position)
+void PlatformIntegrationWindow::on_progressHorizontalSlider_sliderMoved(int position)
 {
     // Calling setProgressValue will change the progress state to normal
     // if it isn't already set to normal, error or paused; make the UI reflect that
@@ -284,7 +284,7 @@ void MainWindow::on_progressHorizontalSlider_sliderMoved(int position)
     }
 }
 
-void MainWindow::on_actionPreviousTab_triggered()
+void PlatformIntegrationWindow::on_actionPreviousTab_triggered()
 {
     if (this->ui->windowsTabWidget->currentIndex() > 0)
     {
@@ -292,7 +292,7 @@ void MainWindow::on_actionPreviousTab_triggered()
     }
 }
 
-void MainWindow::on_actionNextTab_triggered()
+void PlatformIntegrationWindow::on_actionNextTab_triggered()
 {
     if (this->ui->windowsTabWidget->currentIndex() < this->ui->windowsTabWidget->count())
     {
@@ -300,7 +300,7 @@ void MainWindow::on_actionNextTab_triggered()
     }
 }
 
-void MainWindow::on_activateThumbBarPushButton_clicked()
+void PlatformIntegrationWindow::on_activateThumbBarPushButton_clicked()
 {
     ThumbBar *thumbBar = this->thumbBarManager();
     if (thumbBar)
@@ -314,7 +314,7 @@ void MainWindow::on_activateThumbBarPushButton_clicked()
     }
 }
 
-void MainWindow::on_registerFileExtensionsPushButton_clicked()
+void PlatformIntegrationWindow::on_registerFileExtensionsPushButton_clicked()
 {
     WindowsFileRegistration reg;
     if (!reg.areFileExtensionsRegistered("TaskbarHOL"))
@@ -328,7 +328,7 @@ void MainWindow::on_registerFileExtensionsPushButton_clicked()
     }
 }
 
-void MainWindow::on_unregisterFileExtensionsPushButton_clicked()
+void PlatformIntegrationWindow::on_unregisterFileExtensionsPushButton_clicked()
 {
     WindowsFileRegistration reg;
     if (!reg.unregisterFileExtensions("TaskbarHOL", QStringList(".txt")))
@@ -337,7 +337,7 @@ void MainWindow::on_unregisterFileExtensionsPushButton_clicked()
     }
 }
 
-void MainWindow::switchStyle(QString index)
+void PlatformIntegrationWindow::switchStyle(QString index)
 {
 #ifdef Q_WS_WIN
     if (index.toLower() == "explorer")
@@ -355,7 +355,7 @@ void MainWindow::switchStyle(QString index)
     this->updateGeometry();
 }
 
-void MainWindow::toggleComposition(bool enable)
+void PlatformIntegrationWindow::toggleComposition(bool enable)
 {
     DesktopWindowManager::enableComposition(enable);
 
@@ -364,12 +364,12 @@ void MainWindow::toggleComposition(bool enable)
     this->centralWidget()->layout()->setContentsMargins(margins, margins, margins, margins);
 }
 
-void MainWindow::changeMargin(int margin)
+void PlatformIntegrationWindow::changeMargin(int margin)
 {
     DesktopWindowManager::extendFrameIntoClientArea(this, margin, margin, margin, margin);
 }
 
-void MainWindow::on_actionEnableNativeFullScreen_triggered(bool checked)
+void PlatformIntegrationWindow::on_actionEnableNativeFullScreen_triggered(bool checked)
 {
     // Should only change if we're not actually in fullscreen because then we can't exit
     if (!isNativeFullScreen())
@@ -382,7 +382,7 @@ void MainWindow::on_actionEnableNativeFullScreen_triggered(bool checked)
     }
 }
 
-void MainWindow::on_actionEnterFullScreen_triggered()
+void PlatformIntegrationWindow::on_actionEnterFullScreen_triggered()
 {
     if (isNativeFullScreenEnabled())
     {
@@ -401,13 +401,13 @@ void MainWindow::on_actionEnterFullScreen_triggered()
     }
 }
 
-void MainWindow::updateViewMenuState()
+void PlatformIntegrationWindow::updateViewMenuState()
 {
     ui->actionEnableNativeFullScreen->setChecked(isNativeFullScreenEnabled());
     ui->actionEnterFullScreen->setText((isNativeFullScreen() || isFullScreen()) ? tr("Exit Full Screen") : tr("Enter Full Screen"));
 }
 
-void MainWindow::on_dockIconBadgeTextLineEdit_textChanged(const QString &text)
+void PlatformIntegrationWindow::on_dockIconBadgeTextLineEdit_textChanged(const QString &text)
 {
     qiApp->setBadgeText(text);
 }

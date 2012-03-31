@@ -1,22 +1,22 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef PLATFORMINTEGRATIONWINDOW_H
+#define PLATFORMINTEGRATIONWINDOW_H
 
 #include <petroules-utilities.h>
 
 namespace Ui
 {
-    class MainWindow;
+    class PlatformIntegrationWindow;
 }
 
 class QComboBox;
 
-class MainWindow : public IntegratedMainWindow
+class PlatformIntegrationWindow : public IntegratedMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit PlatformIntegrationWindow(QWidget *parent = 0);
+    ~PlatformIntegrationWindow();
 
 private:
     void setPlatformVisibility();
@@ -58,8 +58,8 @@ private slots:
     void on_dockIconBadgeTextLineEdit_textChanged(const QString &text);
 
 private:
-    Ui::MainWindow *ui;
+    Ui::PlatformIntegrationWindow *ui;
     QComboBox *stylesComboBox;
 };
 
-#endif // MAINWINDOW_H
+#endif // PLATFORMINTEGRATIONWINDOW_H

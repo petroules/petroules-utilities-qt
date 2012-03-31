@@ -1,6 +1,14 @@
 #include "windowmanager.h"
+#include "nativewindowinfo.h"
 
 #ifdef Q_WS_WIN
+#include "dwmapi.h"
+
+WId WindowManager::nullWindowId()
+{
+    return NULL;
+}
+
 QRect WindowManager::getWindowRect(WId windowId)
 {
     RECT rect;
@@ -57,57 +65,130 @@ WId WindowManager::rootWindow()
     return GetDesktopWindow();
 }
 
-/*!
-    Returns the window at the specified point, starting the search at the specified window.
-    The desktop window is used if none is specified, and only visible and non-iconic windows
-    are searched, and windows whose handles return true by the passed filter function.
- */
-WId WindowManager::windowFromPoint(const QPoint &p, WId parent, bool (*filterFunction)(WId handle))
+class WindowEnumerator
 {
-    // If we're passed a null handle, this means something probably went wrong, so just return the root window
-    if (!parent)
+public:
+    explicit WindowEnumerator(WId parent = WindowManager::rootWindow(), bool (*filterFunction)(WId handle) = WindowManager::defaultFilterFunction)
     {
-        return WindowManager::rootWindow();
+        // Because WindowEnumerator contains static variables due to the poor design
+        // of EnumChildWindows, we must ensure we don't access this simultaneously
+        mutex.lock();
+        windows.clear();
+        filter = filterFunction;
+        EnumChildWindows(parent, enumChildWindowsProc, 0);
     }
 
-    // Create a list of window IDs
-    QList<WId> *windowIds = new QList<WId>();
-
-    // Here's where we get a little messy. We need to pass our filter function to the enumeration
-    // callback, but the callback takes just one parameter... so we'll use a QPair object to pack
-    // our window list and filter function pointer.
-    QPair<void*, void*> *pair = new QPair<void*, void*>();
-    pair->first = windowIds;
-    pair->second = (void*)filterFunction;
-
-    // Enumerate the child windows of this process, passing it the address of our window ID list
-    // so that the enumeration callback can insert each of the child windows' handles into it, as
-    // well as the filter function (since they are both encapsulated in our QPair)
-    EnumChildWindows(parent, &processWindow, (LPARAM)pair);
-
-    // If this window actually had any child windows...
-    if (windowIds->length() > 0)
+    ~WindowEnumerator()
     {
-        // ...then go through them and...
-        for (int i = 0; i < windowIds->length(); i++)
-        {
-            WId winId = windowIds->at(i);
+        mutex.unlock();
+    }
 
-            // ...check if each child's rect contains our point; if so, check its children as well
-            if (getWindowRect(winId).contains(p))
-            {
-                return windowFromPoint(p, winId, filterFunction);
-            }
+    static BOOL CALLBACK enumChildWindowsProc(WId handle, LPARAM param)
+    {
+        Q_UNUSED(param);
+
+        if (filter(handle))
+        {
+            windows.append(handle);
         }
 
-        // If not, just return the window itself
-        return parent;
+        return true;
+    }
+
+    static QList<WId> windowList()
+    {
+        return windows;
+    }
+
+private:
+    QMutex mutex;
+    static QList<WId> windows;
+    static bool (*filter)(WId);
+};
+
+QList<WId> WindowEnumerator::windows;
+bool (*WindowEnumerator::filter)(WId) = 0;
+
+QList<NativeWindowInfo*> WindowManager::windowList(WindowListOptions listOptions, WId relativeToWindow)
+{
+    Q_UNUSED(listOptions); // TODO: Needs to be implemented
+
+    // qxt likes this solutions - advantages and disadvantages?
+    /*HDESK hdesk = ::OpenInputDesktop(0, false, DESKTOP_READOBJECTS);
+    ::EnumDesktopWindows(hdesk, qxt_EnumWindowsProc, 0);
+    ::CloseDesktop(hdesk);*/
+
+#ifndef QT_NO_DEBUG
+    QElapsedTimer timer;
+    timer.start();
+#endif
+    WindowEnumerator enumerator(relativeToWindow);
+
+    QList<NativeWindowInfo*> list;
+    foreach (WId wid, enumerator.windowList())
+    {
+        NativeWindowInfo *info = new NativeWindowInfo();
+        info->setWindowId(wid);
+        info->setWindowName(getWindowText(wid));
+        info->setBounds(getWindowRect(wid));
+        list.append(info);
+    }
+
+#ifndef QT_NO_DEBUG
+    qDebug() << "Took" << timer.elapsed() << "ms to enumerate window list";
+#endif
+    return list;
+}
+
+QPixmap WindowManager::getCompositeImage(WId windowId, WindowManager::WindowListOptions listOptions, WindowManager::WindowImageTypes imageOptions, QRect bounds)
+{
+    // NOTE: This will not capture window chrome
+    //return QPixmap::grabWindow(windowId);
+
+    // See https://code.google.com/p/aeroshot/ for hacks allowing capture of Aero glass
+    RECT rect;
+    if (!SUCCEEDED(DwmGetWindowAttribute(windowId, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(RECT))))
+    {
+        // failed so Aero is probably disabled; we'll fall back to GetWindowRect
+        GetWindowRect(windowId, &rect);
     }
     else
     {
-        // If it's got no child windows, the window itself is our match
-        return parent;
+        // 100px margin for window shadows; excess transparency will be trimmed later
+        rect.left -= 100;
+        rect.right += 100;
+        rect.top -= 100;
+        rect.bottom += 100;
     }
+
+    HDC hSrc = CreateDC(L"DISPLAY", NULL, NULL, 0);
+    HDC hDest = CreateCompatibleDC(hSrc);
+    HBITMAP hBmp = CreateCompatibleBitmap(hSrc, rect.right - rect.left, rect.bottom - rect.top);
+    HGDIOBJ hOldBmp = SelectObject(hDest, hBmp);
+    BitBlt(hDest, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hSrc, rect.left, rect.top, SRCCOPY | CAPTUREBLT);
+    QPixmap pixmap = QPixmap::fromWinHBITMAP(hBmp);
+    SelectObject(hDest, hOldBmp);
+    DeleteObject(hBmp);
+    DeleteDC(hDest);
+    DeleteDC(hSrc);
+    return pixmap;
+}
+
+uint WindowManager::idleTime()
+{
+    LASTINPUTINFO info;
+    info.cbSize = sizeof(LASTINPUTINFO);
+    if (GetLastInputInfo(&info))
+    {
+        return GetTickCount() - info.dwTime;
+    }
+
+    return -1;
+}
+
+WId WindowManager::activeWindow()
+{
+    return GetForegroundWindow();
 }
 
 /*!

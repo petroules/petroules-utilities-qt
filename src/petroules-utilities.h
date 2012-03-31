@@ -9,6 +9,8 @@
 #include "qversion.h"
 #include "systemkeyboardreadwrite.h"
 #include "translationutils.h"
+#include "nativewindowinfo.h"
+#include "nativewindow.h"
 #include "windowmanager.h"
 #include "dialogs/nativedialogs.h"
 #include "dialogs/nativefiledialog.h"

@@ -25,14 +25,14 @@ TEMPLATE = app
 # --------------------------------------------------
 
 HEADERS += \
-    mainwindow.h
+    hookmonitorwindow.h
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    hookmonitorwindow.cpp
 
 FORMS += \
-    mainwindow.ui
+    hookmonitorwindow.ui
 
 OTHER_FILES += \
     resources.rc

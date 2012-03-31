@@ -8,7 +8,6 @@
 
 class QMenuBar;
 class QMenu;
-class NSEvent;
 
 class PETROULESUTILITIESSHARED_EXPORT IntegratedApplication : public QtSingleApplication
 {

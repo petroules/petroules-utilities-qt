@@ -1,10 +1,10 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "hookmonitorwindow.h"
+#include "ui_hookmonitorwindow.h"
 #include "systemkeyboardreadwrite.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+HookMonitorWindow::HookMonitorWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::HookMonitorWindow)
 {
     ui->setupUi(this);
 
@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     k->setConnected(true);
 }
 
-MainWindow::~MainWindow()
+HookMonitorWindow::~HookMonitorWindow()
 {
     delete ui;
 }
