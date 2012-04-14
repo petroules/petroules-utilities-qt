@@ -47,6 +47,7 @@ void IntegratedApplication::preInitialization()
 {
 @public
     IntegratedApplication* macApplication;
+    id eventMonitor;
 }
 
 - (void)handleDockClickEvent:(NSAppleEventDescriptor*)event withReplyEvent:(NSAppleEventDescriptor*)replyEvent;
@@ -70,17 +71,16 @@ void IntegratedApplication::preInitialization()
 
 void IntegratedApplication::Private::constructorObjc()
 {
-    eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^(NSEvent *incomingEvent) {
-        return incomingEvent;
-    }];
-
     DockIconClickEventHandler* handler = static_cast<DockIconClickEventHandler*>(dockIconClickEventHandler = [[DockIconClickEventHandler alloc] init]);
     handler->macApplication = integratedApplication;
+    handler->eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^(NSEvent *incomingEvent) {
+        return incomingEvent;
+    }];
 }
 
 void IntegratedApplication::Private::destructorObjc()
 {
-    [NSEvent removeMonitor: eventMonitor];
+    [NSEvent removeMonitor: dockIconClickEventHandler->eventMonitor];
 }
 
 void IntegratedApplication::Private::setupCocoaEventHandler()

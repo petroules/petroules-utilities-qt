@@ -31,15 +31,16 @@ defineTest(printDependencyInfo) {
 # Includes an arbitrary library
 defineTest(includeLib) {
     path = $$1
-    lib = $$2
-    mode = $$3 # static or shared
+    libdir = $$2
+    lib = $$3
+    mode = $$4 # static or shared
 
     !build_pass:message("Including $$lib from $${path}...")
 
-    win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$${path}/release/ -l$${lib}
-    else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$${path}/debug/ -l$${lib}
-    else:symbian: LIBS += -l$${lib}
-    else:unix: LIBS += -L$$OUT_PWD/$${path}/ -l$${lib}
+    win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$${libdir}/release/ -l$${lib}
+    else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$${libdir}/debug/ -l$${lib}
+    else:symbian: LIBS += -l$${libdir}
+    else:unix: LIBS += -L$$OUT_PWD/$${libdir}/ -l$${lib}
 
     INCLUDEPATH += $$PWD/$${path}
     DEPENDPATH += $$PWD/$${path}
@@ -71,9 +72,9 @@ defineTest(includeLib) {
 
     # This is only for statically linked libraries
     isEqual(mode, static) {
-        win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$${path}/release/$${lib}.lib
-        else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$${path}/debug/$${lib}.lib
-        else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/$${path}/lib$${lib}.a
+        win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$${libdir}/release/$${lib}.lib
+        else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$${libdir}/debug/$${lib}.lib
+        else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/$${libdir}/lib$${lib}.a
 
         export(PRE_TARGETDEPS)
     }
@@ -95,6 +96,21 @@ defineTest(copyToDestdir) {
 
         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($$DDIR) $$escape_expand(\\n\\t)
     }
+
+    export(QMAKE_POST_LINK)
+}
+
+defineTest(copyDirToDestdir) {
+    dir = $$1
+    DDIR = $$DESTDIR
+
+    # Replace slashes in paths with backslashes for Windows
+    win32:dir ~= s,/,\\,g
+    win32:DDIR ~= s,/,\\,g
+
+    unix:QMAKE_COPY_RECURSIVE = $$QMAKE_COPY -R
+
+    QMAKE_POST_LINK += $$QMAKE_COPY_RECURSIVE $$quote($$dir) $$quote($$DDIR) $$escape_expand(\\n\\t)
 
     export(QMAKE_POST_LINK)
 }

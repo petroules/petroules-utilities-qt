@@ -47,7 +47,7 @@ win32:LIBS += -luser32 -ldwmapi
 macx:LIBS += -framework Cocoa
 
 # Petroules Utilities library
-includeLib(../../src, petroules-utilities, static)
+includeLib(../../src, ../../src, petroules-utilities, static)
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such

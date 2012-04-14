@@ -25,7 +25,7 @@ QString qt_mac_NSStringToQString(const NSString *nsstr)
 NSString* qt_mac_QStringToNSString(const QString &string)
 {
     CFStringRef ref = CFStringCreateWithCharacters(0, reinterpret_cast<const UniChar*>(string.unicode()), string.length());
-    return [reinterpret_cast<const NSString*>(ref) autorelease];
+    return [const_cast<NSString*>(reinterpret_cast<const NSString*>(ref)) autorelease];
 }
 
 NSWindow* qt_mac_windowForWidget(const QWidget *widget)

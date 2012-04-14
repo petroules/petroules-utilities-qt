@@ -5,7 +5,9 @@
 #ifdef Q_WS_MAC
 #include "mac/cocoainitializer.h"
 
-class objc_object;
+#ifdef __OBJC__
+@class DockIconClickEventHandler;
+#endif
 #endif
 
 class IntegratedApplication::Private
@@ -19,8 +21,9 @@ public:
 
     CocoaInitializer *cocoa;
     QMenuBar *macAppMenuBar;
-    objc_object *eventMonitor;
-    objc_object *dockIconClickEventHandler;
+#ifdef __OBJC__
+    DockIconClickEventHandler *dockIconClickEventHandler;
+#endif
 #endif
 
     IntegratedApplication *integratedApplication;
