@@ -35,8 +35,6 @@ defineTest(includeLib) {
     lib = $$3
     mode = $$4 # static or shared
 
-    !build_pass:message("Including $$lib from $${path}...")
-
     win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$${libdir}/release/ -l$${lib}
     else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$${libdir}/debug/ -l$${lib}
     else:symbian: LIBS += -l$${libdir}
@@ -46,8 +44,6 @@ defineTest(includeLib) {
     DEPENDPATH += $$PWD/$${path}
 
     isEqual(lib, petroules-utilities) {
-        !build_pass:message("Including extra headers for QtSolutions...")
-
         isEqual(mode, static) {
             DEFINES += PETROULESUTILITIES_STATIC
             export(DEFINES)
