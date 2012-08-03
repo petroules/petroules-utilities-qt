@@ -1,0 +1,16 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script: git submodule update --init --recursive && mkdir ../petroules-utilities-qt-build && cd ../petroules-utilities-qt-build && qmake ../petroules-utilities-qt/petroules-utilities-qt.pro -r
+script: make
+branches:
+  only:
+    - master
+notifications:
+  recipients:
+    - jake.petroules+travis@petroules.com
+  email:
+    on_success: change
+    on_failure: always
+
