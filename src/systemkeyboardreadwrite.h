@@ -7,9 +7,6 @@
 #include <windows.h>
 #endif
 
-#define byte unsigned char
-#define DWORD unsigned long
-
 class PETROULESUTILITIESSHARED_EXPORT SystemKeyboardReadWrite : public QObject
 {
     Q_OBJECT
@@ -17,12 +14,12 @@ class PETROULESUTILITIESSHARED_EXPORT SystemKeyboardReadWrite : public QObject
 public:
     SystemKeyboardReadWrite();
     ~SystemKeyboardReadWrite();
-    byte* keyboardState() const;
+    unsigned char* keyboardState() const;
     bool isConnected() const;
     bool setConnected(bool state);
 
 signals:
-    void keyPressed(byte *keysDepressed, DWORD keyPressed);
+    void keyPressed(unsigned char *keysDepressed, unsigned long keyPressed);
 
 private:
 #ifdef Q_WS_WIN

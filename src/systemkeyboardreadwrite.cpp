@@ -47,12 +47,12 @@ LRESULT CALLBACK SystemKeyboardReadWrite::keyboardProcedure(int nCode, WPARAM wP
 }
 #endif
 
-byte* SystemKeyboardReadWrite::keyboardState() const
+unsigned char* SystemKeyboardReadWrite::keyboardState() const
 {
 #ifdef Q_WS_WIN
     // Number of keys supported
     const int numberKeys = 256;
-    byte *keysDepressed = new byte[numberKeys];
+    unsigned char *keysDepressed = new unsigned char[numberKeys];
     if (GetKeyboardState(keysDepressed))
     {
         return keysDepressed;
