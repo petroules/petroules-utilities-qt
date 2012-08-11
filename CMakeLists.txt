@@ -4,7 +4,7 @@ include(qt)
 
 project(petroules-utilities-qt)
 
-find_package(Qt4 4.8.0 COMPONENTS QtCore QtGui QtNetwork REQUIRED)
+find_package(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork REQUIRED)
 if(QT4_FOUND)
     include(${QT_USE_FILE})
 endif()
