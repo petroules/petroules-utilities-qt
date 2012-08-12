@@ -15,8 +15,6 @@ if(MSVC)
     add_definitions(-DNOMINMAX) # Needed to avoid an issue with std::numeric_limits<T>
 endif()
 
-set(CMAKE_AUTOMOC ON)
-
 # Path to the source directories of Qt Solutions projects
 set(QSA_DIR "${CMAKE_SOURCE_DIR}/lib/qtsolutions/qtsingleapplication/src")
 set(QPB_DIR "${CMAKE_SOURCE_DIR}/lib/qtsolutions/qtpropertybrowser/src")

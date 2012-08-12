@@ -1,9 +1,10 @@
 set(SOURCES
-    platformintegrationwindow.cpp
-    platformintegrationwindow.ui
     main.cpp
-    resources.rc
+    platformintegrationwindow.cpp
+    platformintegrationwindow.h
+    platformintegrationwindow.ui
     resources.qrc
+    resources.rc
     ../../res/app.icns
 )
 

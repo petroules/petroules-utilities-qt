@@ -1,5 +1,6 @@
 set(SOURCES
     hookmonitorwindow.cpp
+    hookmonitorwindow.h
     hookmonitorwindow.ui
     main.cpp
     resources.rc

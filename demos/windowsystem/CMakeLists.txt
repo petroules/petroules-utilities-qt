@@ -1,7 +1,8 @@
 set(SOURCES
-    mainwindow.cpp
-    mainwindow.ui
     main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
     resources.rc
     ../../res/app.icns
 )
