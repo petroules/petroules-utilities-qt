@@ -1,6 +1,21 @@
-set(TARGET_NAME petroules-utilities)
+# Path to the source directories of Qt Solutions projects
+set(QSA_DIR "../lib/qtsolutions/qtsingleapplication/src")
+set(QPB_DIR "../lib/qtsolutions/qtpropertybrowser/src")
 
-add_definitions(-DPETROULESUTILITIES_LIBRARY)
+include_directories(
+    .
+    ${QSA_DIR}
+    ${QPB_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+if(MSVC)
+    add_definitions(-DNOMINMAX) # Needed to avoid an issue with std::numeric_limits<T>
+endif()
+
+add_definitions(-Wall -DPETROULESUTILITIES_LIBRARY)
+
+set(TARGET_NAME petroules-utilities)
 
 set(SOURCES
     dialogs/nativedialogs.cpp
@@ -99,11 +114,6 @@ file(GLOB_RECURSE res "../res/*")
 list(APPEND SOURCES ${res})
 
 qt_transform_sources(SOURCES "${SOURCES}")
-
-include_directories(.)
-include_directories(${QSA_DIR})
-include_directories(${QPB_SRC})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(${TARGET_NAME} ${SOURCES})
 target_link_libraries(${TARGET_NAME} ${QT_LIBRARIES})
