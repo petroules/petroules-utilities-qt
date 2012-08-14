@@ -19,6 +19,7 @@ set(TARGET_NAME petroules-utilities)
 
 set(SOURCES
     dialogs/nativedialogs.cpp
+  < dialogs/nativedialogs.h >
     dialogs/nativefiledialog.cpp
     dialogs/nativefiledialog.h
     dialogs/nativeopendirectorydialog.cpp
@@ -32,17 +33,6 @@ set(SOURCES
     dialogs/nativesystemdialog.cpp
     dialogs/nativesystemdialog.h
 
-    widgets/explorersearchlineedit.cpp
-    widgets/explorersearchlineedit.h
-    widgets/searchlineedit.cpp
-    widgets/searchlineedit.h
-
-    win32/desktopwindowmanager.cpp
-    win32/jumplist.cpp
-    win32/thumbbar.cpp
-    win32/thumbbar.h
-    win32/windowsfileregistration.cpp
-
     inactivityeventfilter.cpp
     inactivityeventfilter.h
     integratedapplication.cpp
@@ -50,9 +40,14 @@ set(SOURCES
     integratedmainwindow.cpp
     integratedmainwindow.h
     linuxsysteminfo.cpp
+  < linuxsysteminfo.h >
     nativewindow.cpp
+  < nativewindow.h >
     nativewindowinfo.cpp
     nativewindowinfo.h
+  < petroules-utilities-global.h >
+  < petroules-utilities.h >
+    petroules-utilities.rc
     platforminformation.cpp
     platforminformation.h
     qversion.cpp
@@ -60,7 +55,24 @@ set(SOURCES
     systemkeyboardreadwrite.cpp
     systemkeyboardreadwrite.h
     translationutils.cpp
+  < translationutils.h >
+
+    widgets/explorersearchlineedit.cpp
+    widgets/explorersearchlineedit.h
+    widgets/searchlineedit.cpp
+    widgets/searchlineedit.h
+
+    win32/desktopwindowmanager.cpp
+  < win32/desktopwindowmanager.h >
+    win32/jumplist.cpp
+  < win32/jumplist.h >
+    win32/thumbbar.cpp
+    win32/thumbbar.h
+    win32/windowsfileregistration.cpp
+  < win32/windowsfileregistration.h >
+
     windowmanager.cpp
+  < windowmanager.h >
 
     ../res/petroules_utilities_resources.qrc
 
@@ -82,20 +94,32 @@ if(WIN32)
 
     list(APPEND SOURCES
         win32/explorerstyle.cpp
-        petroules-utilities.rc
+      < win32/jumplists_win32.h >
+
         windowmanager_win.cpp
     )
 elseif(APPLE)
     list(APPEND SOURCES
-        mac/cocoaeventlistener.mm
-        mac/cocoainitializer.mm
-        mac/icocoaeventreceiver.mm
-        mac/machelpers.mm
-        mac/macloginitemsmanager.mm
-        widgets/searchlineedit_mac.mm
         integratedapplication_mac.mm
+      < integratedapplication_p.h >
         integratedmainwindow_mac.mm
+      < integratedmainwindow_p.h >
+
+      < mac/cocoaeventlistener.h >
+        mac/cocoaeventlistener.mm
+      < mac/cocoainitializer.h >
+        mac/cocoainitializer.mm
+      < mac/icocoaeventreceiver.h >
+        mac/icocoaeventreceiver.mm
+      < mac/machelpers.h >
+        mac/machelpers.mm
+      < mac/macloginitemsmanager.h >
+        mac/macloginitemsmanager.mm
+
+        widgets/searchlineedit_mac.mm
+
         windowmanager_mac.mm
+      < windowmanager_mac_p.h >
     )
 else()
     list(APPEND SOURCES windowmanager_x11.cpp)
