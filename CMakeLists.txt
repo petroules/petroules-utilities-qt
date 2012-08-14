@@ -10,6 +10,8 @@ if(QT4_FOUND)
     include(${QT_USE_FILE})
 endif()
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.5)
+
 # Set output directories for binaries and static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
