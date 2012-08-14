@@ -3,10 +3,10 @@ set(QSA_DIR "../lib/qtsolutions/qtsingleapplication/src")
 set(QPB_DIR "../lib/qtsolutions/qtpropertybrowser/src")
 
 include_directories(
-    .
-    ${QSA_DIR}
-    ${QPB_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_BINARY_DIR}"
+    "${QSA_DIR}"
+    "${QPB_DIR}"
 )
 
 if(MSVC)
@@ -19,7 +19,6 @@ set(TARGET_NAME petroules-utilities)
 
 set(SOURCES
     dialogs/nativedialogs.cpp
-    dialogs/nativedialogs.h
     dialogs/nativefiledialog.cpp
     dialogs/nativefiledialog.h
     dialogs/nativeopendirectorydialog.cpp
@@ -39,13 +38,10 @@ set(SOURCES
     widgets/searchlineedit.h
 
     win32/desktopwindowmanager.cpp
-    win32/desktopwindowmanager.h
     win32/jumplist.cpp
-    win32/jumplist.h
     win32/thumbbar.cpp
     win32/thumbbar.h
     win32/windowsfileregistration.cpp
-    win32/windowsfileregistration.h
 
     inactivityeventfilter.cpp
     inactivityeventfilter.h
@@ -54,9 +50,7 @@ set(SOURCES
     integratedmainwindow.cpp
     integratedmainwindow.h
     linuxsysteminfo.cpp
-    linuxsysteminfo.h
     nativewindow.cpp
-    nativewindow.h
     nativewindowinfo.cpp
     nativewindowinfo.h
     platforminformation.cpp
@@ -66,9 +60,7 @@ set(SOURCES
     systemkeyboardreadwrite.cpp
     systemkeyboardreadwrite.h
     translationutils.cpp
-    translationutils.h
     windowmanager.cpp
-    windowmanager.h
 
     ../res/petroules_utilities_resources.qrc
 
@@ -115,16 +107,17 @@ list(APPEND SOURCES ${res})
 
 qt_transform_sources(SOURCES "${SOURCES}")
 
-add_library(${TARGET_NAME} ${SOURCES})
-target_link_libraries(${TARGET_NAME} ${QT_LIBRARIES})
+add_library("${TARGET_NAME}" ${SOURCES})
+target_link_libraries("${TARGET_NAME}" ${QT_LIBRARIES})
 
 if(WIN32)
-    target_link_libraries(${TARGET_NAME} comctl32 ole32 gdi32 shlwapi)
+    target_link_libraries("${TARGET_NAME}" comctl32 ole32 gdi32 shlwapi)
     if(MSVC)
-        target_link_libraries(${TARGET_NAME} user32 advapi32 shlwapi shell32)
+        target_link_libraries("${TARGET_NAME}" user32 advapi32 shlwapi shell32)
     endif()
 elseif(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     mark_as_advanced(COCOA_LIBRARY)
-    target_link_libraries(${TARGET_NAME} ${COCOA_LIBRARY})
+
+    target_link_libraries("${TARGET_NAME}" ${COCOA_LIBRARY})
 endif()

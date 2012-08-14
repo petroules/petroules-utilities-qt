@@ -3,11 +3,11 @@ set(QSA_DIR "../lib/qtsolutions/qtsingleapplication/src")
 set(QPB_DIR "../lib/qtsolutions/qtpropertybrowser/src")
 
 include_directories(
-    .
-    ../src
-    ${QSA_DIR}
-    ${QPB_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_BINARY_DIR}"
+    "${CMAKE_SOURCE_DIR}/src"
+    "${QSA_DIR}"
+    "${QPB_DIR}"
 )
 
 if(MSVC)
