@@ -132,10 +132,10 @@ list(APPEND SOURCES ${res})
 qt_transform_sources(SOURCES "${SOURCES}")
 
 add_library("${TARGET_NAME}" ${SOURCES})
-target_link_libraries("${TARGET_NAME}" ${QT_LIBRARIES})
+target_link_libraries("${TARGET_NAME}" ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 
 if(WIN32)
-    target_link_libraries("${TARGET_NAME}" comctl32 ole32 gdi32 shlwapi)
+    target_link_libraries("${TARGET_NAME}" comctl32 ole32 gdi32 shlwapi dwmapi)
     if(MSVC)
         target_link_libraries("${TARGET_NAME}" user32 advapi32 shlwapi shell32)
     endif()
