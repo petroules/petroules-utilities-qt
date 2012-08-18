@@ -1,12 +1,10 @@
 # Path to the source directories of Qt Solutions projects
 set(QSA_DIR "../lib/qtsolutions/qtsingleapplication/src")
-set(QPB_DIR "../lib/qtsolutions/qtpropertybrowser/src")
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${CMAKE_CURRENT_BINARY_DIR}"
     "${QSA_DIR}"
-    "${QPB_DIR}"
 )
 
 if(MSVC)
@@ -84,10 +82,6 @@ set(SOURCES
     ${QSA_DIR}/qtsingleapplication.h
 )
 
-# There's a lot of files in QtPropertyBrowser, add them all
-file(GLOB QPB_SRCS ${QPB_DIR}/*.cpp)
-list(APPEND SOURCES ${GLOB_QPB})
-
 # Platform-specific sources...
 if(WIN32)
     add_definitions(-DWINVER=0x501)
@@ -126,7 +120,7 @@ else()
 endif()
 
 # Add non-source files to IDE
-file(GLOB_RECURSE res "../res/*")
+file(GLOB_RECURSE res ../res/*)
 list(APPEND SOURCES ${res})
 
 qt_transform_sources(SOURCES "${SOURCES}")

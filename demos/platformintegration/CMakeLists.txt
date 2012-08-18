@@ -9,7 +9,7 @@ set(SOURCES
 )
 
 # Add non-source files to IDE
-file(GLOB_RECURSE res "res/*")
+file(GLOB_RECURSE res res/*)
 list(APPEND SOURCES ${res})
 
 qt_transform_sources(SOURCES "${SOURCES}")
