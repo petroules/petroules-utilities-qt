@@ -1,9 +1,9 @@
 function(git_shorttag rev_id)
-    find_program(GIT git)
-    if(GIT AND EXISTS "${CMAKE_SOURCE_DIR}/.git" AND IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.git")
+    find_package(Git)
+    if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git" AND IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.git")
         execute_process(
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            COMMAND ${GIT} rev-parse --short HEAD
+            COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
             OUTPUT_VARIABLE GIT_OUT OUTPUT_STRIP_TRAILING_WHITESPACE
         )
         set(${rev_id} "${GIT_OUT}" PARENT_SCOPE)
