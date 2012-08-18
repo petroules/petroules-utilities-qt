@@ -64,9 +64,31 @@ function(qt_transform_sources output_var sources)
         endif()
     endforeach()
 
-    # Organize the list...
-    list(SORT final_sources)
+    # Remove any duplicate items from our final source list
     list(REMOVE_DUPLICATES final_sources)
+
+    # Here is a nice trick to get real alphabetical ordering... most IDEs will
+    # display the filenames of source files without any path. However, because
+    # our list may include both relative and absolute paths, sorting it will
+    # not produce the desired result since the sort key is the entire path
+    # and not just the name part. So what we'll do is create a clone of our
+    # source list, but prepend the name of each file to its path, then sort that
+    # list, giving us true alphabetical ordering. Then we'll simply remove the
+    # prefixes after sorting to get our original list back, but sorted appropriately.
+    # We use four backslashes surrounded by colons to separate items since that sequence
+    # is extremely unlikely to ever appear in any filename.
+    foreach(final_source ${final_sources})
+        get_filename_component(final_source_name "${final_source}" NAME)
+        list(APPEND final_sources_sorter "${final_source_name}:\\\\\\\\:${final_source}")
+    endforeach()
+
+    list(SORT final_sources_sorter)
+    set(final_sources ) # clear out the real variable
+
+    foreach(final_source_sorted ${final_sources_sorter})
+        string(REGEX REPLACE "(.*):\\\\\\\\\\\\\\\\:" "" final_source_sorted "${final_source_sorted}")
+        list(APPEND final_sources "${final_source_sorted}")
+    endforeach()
 
     # Sets the final_sources var to the parent scope so we can
     # pass it to add_executable or add_library
