@@ -9,9 +9,15 @@ include_directories(
 
 if(MSVC)
     add_definitions(-DNOMINMAX) # Needed to avoid an issue with std::numeric_limits<T>
+
+    # Needed to prevent link errors with QString::toStdWString()
+    # https://qt-project.org/wiki/toStdWStringAndBuiltInWchar
+    add_definitions(/Zc:wchar_t-)
 endif()
 
-add_definitions(-Wall -DPETROULESUTILITIES_LIBRARY)
+if(BUILD_SHARED_LIBS)
+    add_definitions(-DPETROULESUTILITIES_EXPORTS)
+endif()
 
 set(TARGET_NAME petroules-utilities)
 

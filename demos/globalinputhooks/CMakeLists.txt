@@ -5,6 +5,7 @@ set(SOURCES
     main.cpp
     resources.rc
     ../../res/app.icns
+	../../res/petroules_utilities_resources.qrc
 )
 
 qt_transform_sources(SOURCES "${SOURCES}")
@@ -16,3 +17,7 @@ endif()
 
 add_executable(globalinputhooks WIN32 MACOSX_BUNDLE ${SOURCES})
 target_link_libraries(globalinputhooks ${QT_LIBRARIES} petroules-utilities)
+
+if(WIN32)
+    target_link_libraries(globalinputhooks ${QT_QTMAIN_LIBRARY})
+endif()

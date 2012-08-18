@@ -18,5 +18,5 @@ add_executable(windowsystem WIN32 MACOSX_BUNDLE ${SOURCES})
 target_link_libraries(windowsystem ${QT_LIBRARIES} petroules-utilities)
 
 if(WIN32)
-    target_link_libraries(windowsystem user32 dwmapi)
+    target_link_libraries(windowsystem user32 dwmapi ${QT_QTMAIN_LIBRARY})
 endif()

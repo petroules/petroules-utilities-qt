@@ -6,6 +6,7 @@ set(SOURCES
     resources.qrc
     resources.rc
     ../../res/app.icns
+	../../res/petroules_utilities_resources.qrc
 )
 
 # Add non-source files to IDE
@@ -23,5 +24,5 @@ add_executable(platformintegration WIN32 MACOSX_BUNDLE ${SOURCES})
 target_link_libraries(platformintegration ${QT_LIBRARIES} petroules-utilities)
 
 if(WIN32)
-    target_link_libraries(platformintegration user32)
+    target_link_libraries(platformintegration user32 ${QT_QTMAIN_LIBRARY})
 endif()

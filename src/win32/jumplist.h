@@ -7,7 +7,7 @@
     \class JumpListFile
     Represents a jump list file destination.
  */
-struct JumpListFile
+struct PETROULESUTILITIESSHARED_EXPORT JumpListFile
 {
 public:
     /*!
@@ -43,7 +43,7 @@ public:
     \struct JumpListLink
     Represents a jump list link or shortcut destination.
 */
-struct JumpListLink
+struct PETROULESUTILITIESSHARED_EXPORT JumpListLink
 {
 public:
     /*!
@@ -102,10 +102,10 @@ public:
     \class Destination
     Represents a jump list item that is either a separator, file (\a JumpListFile) or link (\a JumpListLink).
  */
-class Destination
+class PETROULESUTILITIESSHARED_EXPORT Destination
 {
 public:
-    enum Type
+    enum PETROULESUTILITIESSHARED_EXPORT Type
     {
         Separator,
         File,

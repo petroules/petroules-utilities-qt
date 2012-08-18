@@ -16,7 +16,7 @@ if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)
 endif()
 
-add_definitions(-Wall)
+add_definitions(-Wall -DUNICODE)
 
 # Set output directories for binaries and static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

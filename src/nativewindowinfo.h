@@ -2,13 +2,14 @@
 #define NATIVEWINDOWINFO_H
 
 #include <QtGui>
+#include "petroules-utilities-global.h"
 
-class NativeWindowInfo : public QObject
+class PETROULESUTILITIESSHARED_EXPORT NativeWindowInfo : public QObject
 {
     Q_OBJECT
 
 public:
-    enum WindowLevel
+    enum PETROULESUTILITIESSHARED_EXPORT WindowLevel
     {
         TODO
     };
