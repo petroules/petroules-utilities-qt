@@ -161,7 +161,7 @@ QPixmap WindowManager::getCompositeImage(WId windowId, WindowManager::WindowList
         rect.bottom += 100;
     }
 
-    HDC hSrc = CreateDC(L"DISPLAY", NULL, NULL, 0);
+    HDC hSrc = CreateDC(TEXT("DISPLAY"), NULL, NULL, 0);
     HDC hDest = CreateCompatibleDC(hSrc);
     HBITMAP hBmp = CreateCompatibleBitmap(hSrc, rect.right - rect.left, rect.bottom - rect.top);
     HGDIOBJ hOldBmp = SelectObject(hDest, hBmp);

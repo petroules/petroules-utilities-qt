@@ -28,7 +28,7 @@ IntegratedMainWindow::IntegratedMainWindow(QWidget *parent)
     d->window = this;
 #ifdef Q_WS_WIN
     d->m_thumbBarManager = new ThumbBar(this);
-    d->m_taskbarMessageId = RegisterWindowMessage(L"TaskbarButtonCreated");
+    d->m_taskbarMessageId = RegisterWindowMessage(TEXT("TaskbarButtonCreated"));
 
     if (DesktopWindowManager::isCompositionEnabled())
     {
@@ -518,7 +518,7 @@ void IntegratedMainWindow::initialize(long *result)
 
 void DwmInvalidateIconicBitmaps(HWND hwnd)
 {
-    HMODULE dwmapi = LoadLibrary(L"dwmapi.dll");
+    HMODULE dwmapi = LoadLibrary(TEXT("dwmapi.dll"));
     if (dwmapi)
     {
         t_DwmInvalidateIconicBitmaps invalidate_icon_bitmap = reinterpret_cast<t_DwmInvalidateIconicBitmaps>(GetProcAddress(dwmapi, "DwmInvalidateIconicBitmaps"));
@@ -530,7 +530,7 @@ void DwmInvalidateIconicBitmaps(HWND hwnd)
 
 void DwmSetIconicThumbnail(HWND hwnd, HBITMAP hbmp, DWORD dwSITFlags)
 {
-    HMODULE dwmapi = LoadLibrary(L"dwmapi.dll");
+    HMODULE dwmapi = LoadLibrary(TEXT("dwmapi.dll"));
     if (dwmapi)
     {
         t_DwmSetIconicThumbnail set_iconic_thumbnail = reinterpret_cast<t_DwmSetIconicThumbnail>(GetProcAddress(dwmapi, "DwmSetIconicThumbnail"));
@@ -542,7 +542,7 @@ void DwmSetIconicThumbnail(HWND hwnd, HBITMAP hbmp, DWORD dwSITFlags)
 
 void DwmSetWindowAttribute(HWND hwnd, DWORD dwAttribute, LPCVOID pvAttribute, DWORD cbAttribute)
 {
-    HMODULE dwmapi = LoadLibrary(L"dwmapi.dll");
+    HMODULE dwmapi = LoadLibrary(TEXT("dwmapi.dll"));
     if (dwmapi)
     {
         t_DwmSetWindowAttribute set_window_attribute = reinterpret_cast<t_DwmSetWindowAttribute>(GetProcAddress(dwmapi, "DwmSetWindowAttribute"));
@@ -554,7 +554,7 @@ void DwmSetWindowAttribute(HWND hwnd, DWORD dwAttribute, LPCVOID pvAttribute, DW
 
 void DwmSetIconicLivePreviewBitmap(HWND hwnd, HBITMAP hbmp, POINT *pptClient, DWORD dwSITFlags)
 {
-    HMODULE dwmapi = LoadLibrary(L"dwmapi.dll");
+    HMODULE dwmapi = LoadLibrary(TEXT("dwmapi.dll"));
     if (dwmapi)
     {
         t_DwmSetIconicLivePreviewBitmap set_live_preview = reinterpret_cast<t_DwmSetIconicLivePreviewBitmap>(GetProcAddress(dwmapi, "DwmSetIconicLivePreviewBitmap"));

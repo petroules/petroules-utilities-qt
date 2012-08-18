@@ -245,7 +245,7 @@ IShellItem* JumpList::Private::createShellItem(const Destination &destination) c
 
     IShellItem *shellItem = NULL;
 
-    HMODULE shell = LoadLibrary(L"shell32.dll");
+    HMODULE shell = LoadLibrary(TEXT("shell32.dll"));
     if (shell)
     {
         t_SHCreateItemFromParsingName SHCreateItemFromParsingName = reinterpret_cast<t_SHCreateItemFromParsingName>(GetProcAddress(shell, "SHCreateItemFromParsingName"));

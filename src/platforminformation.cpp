@@ -8,6 +8,10 @@ QString PlatformInformation::osString()
 #if defined(Q_OS_WIN) && defined(Q_WS_WIN)
     switch (QSysInfo::WindowsVersion)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 3)
+        case QSysInfo::WT_WINDOWS8:
+            return "Windows NT 6.2 (8 or Server 2012)";
+#endif
         case QSysInfo::WV_WINDOWS7:
             return "Windows NT 6.1 (7 or Server 2008 R2)";
         case QSysInfo::WV_VISTA:
@@ -43,34 +47,24 @@ QString PlatformInformation::osString()
             return "Windows";
     }
 #elif defined(Q_OS_MAC) && defined(Q_WS_MAC)
+    QStringList osxVersions;
+    osxVersions << "Cheetah" << "Puma" << "Jaguar" << "Panther" << "Tiger" << "Leopard" << "Snow Leopard" << "Lion" << "Mountain Lion";
+    
     switch (QSysInfo::MacintoshVersion)
     {
-        case 0xA: // QSysInfo::MV_MOUNTAINLION when it's added
-            return "Mac OS X 10.8 Mountain Lion";
-        case QSysInfo::MV_LION:
-            return "Mac OS X 10.7 Lion";
-        case QSysInfo::MV_SNOWLEOPARD:
-            return "Mac OS X 10.6 Snow Leopard";
-        case QSysInfo::MV_LEOPARD:
-            return "Mac OS X 10.5 Leopard";
-        case QSysInfo::MV_TIGER:
-            return "Mac OS X 10.4 Tiger";
-        case QSysInfo::MV_PANTHER:
-            return "Mac OS X 10.3 Panther";
-
-        case QSysInfo::MV_JAGUAR:
-            return "Mac OS X 10.2 Jaguar";
-        case QSysInfo::MV_PUMA:
-            return "Mac OS X 10.1 Puma";
-        case QSysInfo::MV_CHEETAH:
-            return "Mac OS X 10.0 Cheetah";
-
+        case QSysInfo::MV_Unknown:
+            return "Mac OS";
         case QSysInfo::MV_9:
             return "Mac OS 9";
-
         default:
-            return "Mac OS";
+            break;
     }
+    
+    int version = static_cast<int>(QSysInfo::MacintoshVersion) - static_cast<int>(QSysInfo::MV_10_0);
+    if (version >= 0 && version < osxVersions.size())
+        return QString("OS X 10.%1 %2").arg(version).arg(osxVersions.at(version));
+    else
+        return QString("OS X 10.%1").arg(version);
 #elif defined(Q_OS_UNIX)
     #if defined(Q_OS_AIX)
         return "AIX";
