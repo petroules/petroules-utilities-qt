@@ -14,44 +14,59 @@ function(qt_transform_sources output_var sources)
         elseif("${file}" STREQUAL ">")
             set(QtUtils_DO_MOC ON)
         else()
-            list(APPEND final_sources "${file}")
-        endif()
+            get_filename_component(file_name "${file}" NAME)
 
-        if("${file}" MATCHES "(.*)\\.(rc|manifest|plist|desktop)$")
-            source_group("Resources" FILES "${file}")
-        elseif("${file}" MATCHES "(.*)\\.(icns|ico)$")
-            source_group("Resources\\Icons" FILES "${file}")
-        elseif("${file}" MATCHES "(.*)\\.(png|jpg|jpeg|gif|tif|tiff|svg)$")
-            source_group("Resources\\Images" FILES "${file}")
-        elseif("${file}" MATCHES "(.*)\\.(txt|rtf|pdf)$" AND NOT "${file}" STREQUAL "CMakeLists.txt")
-            source_group("Resources\\Other" FILES "${file}")
-        elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.qrc$")
-            qt4_add_resources(outfile "${file}")
-            source_group("Qt Resources" FILES "${file}")
-        elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.ui$")
-            qt4_wrap_ui(outfile "${file}")
-            source_group("Qt Forms" FILES "${file}")
-        elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.ts$")
-            qt4_add_translation(outfile "${file}")
-            source_group("Qt Translations" FILES "${file}")
-        elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.h$" AND QtUtils_DO_MOC)
-            qt4_wrap_cpp(outfile "${file}")
-        endif()
+            # For some very odd reason, CMake's Visual Studio 2010 generator added
+            # a particular file twice (once as a None and once as CustomBuild)
+            # when that file used an absolute path... so convert our sources
+            # to relative paths if possible...
+            string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" file "${file}")
 
-        # If we generated anything this round...
-        if(outfile)
-            list(APPEND final_sources "${outfile}")
+            # IGNORE these...
+            if(NOT "${file_name}" STREQUAL ".DS_Store" AND NOT "${file_name}" STREQUAL "Thumbs.db")
+                list(APPEND final_sources "${file}")
+            endif()
 
-            # Don't quote outfile because it's a list containing
-            # the same filename twice (odd, I know...)
-            source_group("Generated Files" FILES ${outfile})
+            if("${file}" MATCHES "(.*)\\.(rc|manifest|plist|desktop)$")
+                source_group("Resources" FILES "${file}")
+            elseif("${file}" MATCHES "(.*)\\.(icns|ico)$")
+                source_group("Resources\\Icons" FILES "${file}")
+            elseif("${file}" MATCHES "(.*)\\.(png|jpg|jpeg|gif|tif|tiff|svg)$")
+                source_group("Resources\\Images" FILES "${file}")
+            elseif("${file}" MATCHES "(.*)\\.(txt|rtf|pdf|url)$" AND NOT "${file_name}" STREQUAL "CMakeLists.txt")
+                source_group("Resources\\Other" FILES "${file}")
+            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.qrc$")
+                qt4_add_resources(outfile "${file}")
+                source_group("Qt Resources" FILES "${file}")
+            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.ui$")
+                qt4_wrap_ui(outfile "${file}")
+                source_group("Qt Forms" FILES "${file}")
+            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.ts$")
+                qt4_add_translation(outfile "${file}")
+                source_group("Qt Translations" FILES "${file}")
+            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.h$" AND QtUtils_DO_MOC)
+                qt4_wrap_cpp(outfile "${file}")
+            endif()
 
-            if(QtUtils_VERBOSE)
-                get_filename_component(outfile_name "${outfile}" NAME)
-                message("Generated ${outfile_name}")
+            # If we generated anything this round...
+            if(outfile)
+                list(APPEND final_sources "${outfile}")
+
+                # Don't quote outfile because it's a list containing
+                # the same filename twice (odd, I know...)
+                source_group("Generated Files" FILES ${outfile})
+
+                if(QtUtils_VERBOSE)
+                    get_filename_component(outfile_name "${outfile}" NAME)
+                    message("Generated ${outfile_name}")
+                endif()
             endif()
         endif()
     endforeach()
+
+    # Organize the list...
+    list(SORT final_sources)
+    list(REMOVE_DUPLICATES final_sources)
 
     # Sets the final_sources var to the parent scope so we can
     # pass it to add_executable or add_library

@@ -72,8 +72,6 @@ set(SOURCES
     windowmanager.cpp
   < windowmanager.h >
 
-    ../res/petroules_utilities_resources.qrc
-
     ${QSA_DIR}/qtlocalpeer.cpp
     ${QSA_DIR}/qtlocalpeer.h
     ${QSA_DIR}/qtsinglecoreapplication.cpp
@@ -131,7 +129,7 @@ target_link_libraries("${TARGET_NAME}" ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} 
 if(WIN32)
     target_link_libraries("${TARGET_NAME}" comctl32 ole32 gdi32 shlwapi dwmapi)
     if(MSVC)
-        target_link_libraries("${TARGET_NAME}" user32 advapi32 shlwapi shell32)
+        target_link_libraries("${TARGET_NAME}" user32 advapi32 shell32)
     endif()
 elseif(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
