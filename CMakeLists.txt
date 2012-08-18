@@ -5,6 +5,8 @@ include(GitUtils)
 
 project(petroules-utilities-qt)
 
+use_qt_sdk_locations()
+
 find_package(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork REQUIRED)
 if(QT4_FOUND)
     include(${QT_USE_FILE})

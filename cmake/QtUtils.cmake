@@ -57,3 +57,40 @@ function(qt_transform_sources output_var sources)
     # pass it to add_executable or add_library
     set(${output_var} "${final_sources}" PARENT_SCOPE)
 endfunction()
+
+# Appends all possible Qt SDK location paths to CMAKE_PREFIX_PATH
+# Currently only does anything on Windows
+macro(use_qt_sdk_locations)
+    set(QT_ALL_VERSIONS
+        4.8.2
+        4.8.1
+        4.8.0
+        4.7.4
+        4.7.3
+        4.7.2
+        4.7.1
+        4.7.0
+        4.6.3
+        4.6.2
+        4.6.1
+        4.6.0
+        4.5.3
+        4.5.2
+        4.5.1
+        4.5.0
+    )
+
+    if(MSVC10)
+        foreach(qt_v ${QT_ALL_VERSIONS})
+            list(APPEND CMAKE_PREFIX_PATH "C:\\QtSDK\\Desktop\\Qt\\${qt_v}\\msvc2010")
+        endforeach()
+    elseif(MSVC90)
+        foreach(qt_v ${QT_ALL_VERSIONS})
+            list(APPEND CMAKE_PREFIX_PATH "C:\\QtSDK\\Desktop\\Qt\\${qt_v}\\msvc2008")
+        endforeach()
+    elseif(MINGW)
+        foreach(qt_v ${QT_ALL_VERSIONS})
+            list(APPEND CMAKE_PREFIX_PATH "C:\\QtSDK\\Desktop\\Qt\\${qt_v}\\mingw")
+        endforeach()
+    endif()
+endmacro()
