@@ -2,8 +2,8 @@ language: cpp
 compiler:
   - gcc
   - clang
-before_script: git submodule update --init --recursive && mkdir ../build-qmake ../build-cmake && cd ../build-qmake && qmake ../petroules-utilities-qt/petroules-utilities-qt.pro -r && cd ../build-cmake && cmake -DCMAKE_BUILD_TYPE=Release ../petroules-utilities-qt && cd ..
-script: make -C build-qmake && make -C build-cmake
+before_script: ./configure.sh
+script: ./make.sh
 branches:
   only:
     - master
@@ -13,4 +13,3 @@ notifications:
   email:
     on_success: change
     on_failure: always
-
