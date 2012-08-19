@@ -1,6 +1,5 @@
 #include "windowsfileregistration.h"
 #ifdef Q_WS_WIN
-#include <QtGui>
 #include <qt_windows.h>
 #include <shlwapi.h>
 #include <shlobj.h>

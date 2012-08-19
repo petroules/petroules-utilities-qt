@@ -1,7 +1,6 @@
 #ifndef NATIVEWINDOW_H
 #define NATIVEWINDOW_H
 
-#include <QWidget>
 #include "petroules-utilities-global.h"
 
 class PETROULESUTILITIESSHARED_EXPORT NativeWindow : public QWidget

@@ -2,7 +2,6 @@
 #define WINDOWMANAGER_H
 
 #include "petroules-utilities-global.h"
-#include <QtGui>
 
 // Platform-specific headers for private functions
 #ifdef Q_WS_WIN

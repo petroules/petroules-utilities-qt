@@ -2,7 +2,6 @@
 #define SYSTEMKEYBOARDREADWRITE_H
 
 #include "petroules-utilities-global.h"
-#include <QObject>
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif

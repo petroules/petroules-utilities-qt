@@ -2,7 +2,6 @@
 #define LINUXSYSTEMINFO_H
 
 #include "petroules-utilities-global.h"
-#include <QtCore>
 
 /*!
     \class LinuxSystemInfo

@@ -1,5 +1,4 @@
 #include "explorersearchlineedit.h"
-#include <QtGui>
 
 class ExplorerSearchLineEdit::Private
 {

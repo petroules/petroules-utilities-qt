@@ -2,7 +2,6 @@
 #define QVERSION_H
 
 #include "petroules-utilities-global.h"
-#include <QtCore>
 
 struct PETROULESUTILITIESSHARED_EXPORT QVersion : public QObject
 {

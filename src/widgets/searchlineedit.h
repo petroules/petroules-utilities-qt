@@ -2,8 +2,6 @@
 #define MACTOOLBARSEARCHWIDGET_H
 
 #include "petroules-utilities-global.h"
-#include <QWidget>
-#include <QMenu>
 
 #ifdef Q_WS_MAC
 #include "mac/icocoaeventreceiver.h"

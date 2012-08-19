@@ -1,7 +1,6 @@
 #ifndef NATIVEWINDOWINFO_H
 #define NATIVEWINDOWINFO_H
 
-#include <QtGui>
 #include "petroules-utilities-global.h"
 
 class PETROULESUTILITIESSHARED_EXPORT NativeWindowInfo : public QObject

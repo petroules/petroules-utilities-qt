@@ -2,7 +2,6 @@
 #define MESSAGEBOXSHEET_H
 
 #include "petroules-utilities-global.h"
-#include <QtGui>
 
 class PETROULESUTILITIESSHARED_EXPORT NativeDialogs
 {

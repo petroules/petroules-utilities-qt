@@ -3,6 +3,7 @@
 
 #include <QtGui>
 
+// https://binglongx.wordpress.com/2009/01/29/felxible-dllstatic-library-linkage-configurations/
 #if defined(PETROULESUTILITIES_EXPORTS)
 #  define PETROULESUTILITIESSHARED_EXPORT Q_DECL_EXPORT
 #  define QT_QTSINGLECOREAPPLICATION_EXPORT Q_DECL_EXPORT

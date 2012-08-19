@@ -2,7 +2,6 @@
 #define PLATFORMINFORMATION_H
 
 #include "petroules-utilities-global.h"
-#include <QtCore>
 
 class PETROULESUTILITIESSHARED_EXPORT PlatformInformation : public QObject
 {

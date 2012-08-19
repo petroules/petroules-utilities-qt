@@ -1,5 +1,4 @@
 #include "systemkeyboardreadwrite.h"
-#include <QDebug>
 #include <iostream>
 #ifdef Q_WS_WIN
 #include <windows.h>

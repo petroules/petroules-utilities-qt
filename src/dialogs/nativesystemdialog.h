@@ -2,7 +2,6 @@
 #define NATIVESYSTEMDIALOG_H
 
 #include "petroules-utilities-global.h"
-#include <QtGui>
 
 class PETROULESUTILITIESSHARED_EXPORT NativeSystemDialog : public QObject
 {

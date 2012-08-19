@@ -2,7 +2,6 @@
 #define INACTIVITYEVENTFILTER_H
 
 #include "petroules-utilities-global.h"
-#include <QtCore>
 
 class PETROULESUTILITIESSHARED_EXPORT InactivityEventFilter : public QObject
 {

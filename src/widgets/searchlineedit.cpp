@@ -1,8 +1,5 @@
 #include "searchlineedit.h"
 #include "explorersearchlineedit.h"
-#include <QToolButton>
-#include <QStyle>
-#include <QLineEdit>
 
 #ifndef Q_WS_MAC
 SearchLineEdit::SearchLineEdit(QWidget *parent)

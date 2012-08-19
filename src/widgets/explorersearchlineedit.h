@@ -1,9 +1,9 @@
 #ifndef EXPLORERSEARCHLINEEDIT_H
 #define EXPLORERSEARCHLINEEDIT_H
 
-#include <QLineEdit>
+#include "petroules-utilities-global.h"
 
-class ExplorerSearchLineEdit : public QLineEdit
+class PETROULESUTILITIESSHARED_EXPORT ExplorerSearchLineEdit : public QLineEdit
 {
     Q_OBJECT
 

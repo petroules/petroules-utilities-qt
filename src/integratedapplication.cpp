@@ -1,6 +1,5 @@
 #include "integratedapplication.h"
 #include "integratedapplication_p.h"
-#include <QtGui>
 #if defined(Q_WS_WIN)
 #include "windows.h"
 #include "win32/explorerstyle.h"
