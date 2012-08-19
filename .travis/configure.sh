@@ -18,5 +18,3 @@ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON ../petroules-utilities-q
 cd ../build-cmake-static
 cmake -DCMAKE_BUILD_TYPE=Release ../petroules-utilities-qt
 
-# Return to one level above the source directory
-cd ..
