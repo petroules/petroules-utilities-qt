@@ -9,6 +9,10 @@ set(SOURCES
 
 qt_transform_sources(SOURCES "${SOURCES}")
 
+if(BUILD_SHARED_LIBS)
+    add_definitions(-DPETROULESUTILITIES_IMPORTS)
+endif()
+
 if(APPLE)
     set_source_files_properties(../../res/app.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE app.icns)
