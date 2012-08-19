@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-struct PETROULESUTILITIESSHARED_EXPORT QVersion : public QObject
+struct PETROULES_UTILITIES_API QVersion : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool valid READ isValid)
@@ -43,12 +43,12 @@ public:
     inline int minorRevision() const { return (qint16)(this->m_revision & 65535); }
 
     QVersion& operator=(const QVersion &version);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator==(const QVersion &v1, const QVersion &v2);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator!=(const QVersion &v1, const QVersion &v2);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator<(const QVersion &v1, const QVersion &v2);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator<=(const QVersion &v1, const QVersion &v2);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator>(const QVersion &v1, const QVersion &v2);
-    PETROULESUTILITIESSHARED_EXPORT friend bool operator>=(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator==(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator!=(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator<(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator<=(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator>(const QVersion &v1, const QVersion &v2);
+    PETROULES_UTILITIES_API friend bool operator>=(const QVersion &v1, const QVersion &v2);
 
 private:
     inline static void copy(QVersion *const destination, const QVersion &source);

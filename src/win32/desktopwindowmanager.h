@@ -6,7 +6,7 @@
 class QWidget;
 class WindowNotifier;
 
-class PETROULESUTILITIESSHARED_EXPORT DesktopWindowManager
+class PETROULES_UTILITIES_API DesktopWindowManager
 {
 public:
     static bool setBlurBehindEnabled(QWidget *widget, bool enable = true);

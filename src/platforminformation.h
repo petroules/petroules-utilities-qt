@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT PlatformInformation : public QObject
+class PETROULES_UTILITIES_API PlatformInformation : public QObject
 {
     Q_OBJECT
 

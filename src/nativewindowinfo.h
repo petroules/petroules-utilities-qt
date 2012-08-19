@@ -3,12 +3,12 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT NativeWindowInfo : public QObject
+class PETROULES_UTILITIES_API NativeWindowInfo : public QObject
 {
     Q_OBJECT
 
 public:
-    enum PETROULESUTILITIESSHARED_EXPORT WindowLevel
+    enum PETROULES_UTILITIES_API WindowLevel
     {
         TODO
     };

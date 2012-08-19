@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT WindowsFileRegistration
+class PETROULES_UTILITIES_API WindowsFileRegistration
 {
 public:
     WindowsFileRegistration();

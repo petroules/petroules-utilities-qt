@@ -92,6 +92,7 @@ if(WIN32)
 
     list(APPEND SOURCES
         win32/explorerstyle.cpp
+	  < win32/explorerstyle.h >
       < win32/jumplists_win32.h >
 
         windowmanager_win.cpp

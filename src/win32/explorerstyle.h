@@ -13,7 +13,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT ExplorerStyle : public QWindowsVistaStyle
+class PETROULES_UTILITIES_API ExplorerStyle : public QWindowsVistaStyle
 {
 public:
     ExplorerStyle();

@@ -9,7 +9,7 @@
 class QMenuBar;
 class QMenu;
 
-class PETROULESUTILITIESSHARED_EXPORT IntegratedApplication : public QtSingleApplication
+class PETROULES_UTILITIES_API IntegratedApplication : public QtSingleApplication
 {
     Q_OBJECT
 

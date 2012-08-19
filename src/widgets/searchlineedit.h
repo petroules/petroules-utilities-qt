@@ -9,7 +9,7 @@
 
 class ExplorerSearchLineEdit;
 
-class PETROULESUTILITIESSHARED_EXPORT SearchLineEdit : public QWidget
+class PETROULES_UTILITIES_API SearchLineEdit : public QWidget
 #ifdef Q_WS_MAC
 , public ICocoaEventReceiver
 #endif

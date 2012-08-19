@@ -6,7 +6,7 @@
 #include <windows.h>
 #endif
 
-class PETROULESUTILITIESSHARED_EXPORT SystemKeyboardReadWrite : public QObject
+class PETROULES_UTILITIES_API SystemKeyboardReadWrite : public QObject
 {
     Q_OBJECT
 

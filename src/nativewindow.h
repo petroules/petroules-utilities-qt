@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT NativeWindow : public QWidget
+class PETROULES_UTILITIES_API NativeWindow : public QWidget
 {
 public:
     explicit NativeWindow(WId wid);

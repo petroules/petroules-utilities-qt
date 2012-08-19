@@ -9,7 +9,7 @@
     The TranslationUtils class provides helper methods used in translating Qt applications
     to various languages.
  */
-class PETROULESUTILITIESSHARED_EXPORT TranslationUtils
+class PETROULES_UTILITIES_API TranslationUtils
 {
 public:
     static QStringList findQmFiles();

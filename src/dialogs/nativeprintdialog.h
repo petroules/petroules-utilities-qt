@@ -6,7 +6,7 @@
 
 #ifndef QT_NO_PRINTER
 
-class PETROULESUTILITIESSHARED_EXPORT NativePrintDialog : public NativeSystemDialog
+class PETROULES_UTILITIES_API NativePrintDialog : public NativeSystemDialog
 {
     Q_OBJECT
 

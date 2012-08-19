@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT ExplorerSearchLineEdit : public QLineEdit
+class PETROULES_UTILITIES_API ExplorerSearchLineEdit : public QLineEdit
 {
     Q_OBJECT
 

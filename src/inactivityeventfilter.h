@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT InactivityEventFilter : public QObject
+class PETROULES_UTILITIES_API InactivityEventFilter : public QObject
 {
     Q_OBJECT
 public:

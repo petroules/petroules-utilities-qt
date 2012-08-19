@@ -5,7 +5,7 @@
 
 class ThumbBar;
 
-class PETROULESUTILITIESSHARED_EXPORT IntegratedMainWindow : public QMainWindow
+class PETROULES_UTILITIES_API IntegratedMainWindow : public QMainWindow
 {
     Q_OBJECT
 

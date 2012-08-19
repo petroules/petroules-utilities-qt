@@ -7,7 +7,7 @@
     \class JumpListFile
     Represents a jump list file destination.
  */
-struct PETROULESUTILITIESSHARED_EXPORT JumpListFile
+struct PETROULES_UTILITIES_API JumpListFile
 {
 public:
     /*!
@@ -43,7 +43,7 @@ public:
     \struct JumpListLink
     Represents a jump list link or shortcut destination.
 */
-struct PETROULESUTILITIESSHARED_EXPORT JumpListLink
+struct PETROULES_UTILITIES_API JumpListLink
 {
 public:
     /*!
@@ -102,10 +102,10 @@ public:
     \class Destination
     Represents a jump list item that is either a separator, file (\a JumpListFile) or link (\a JumpListLink).
  */
-class PETROULESUTILITIESSHARED_EXPORT Destination
+class PETROULES_UTILITIES_API Destination
 {
 public:
-    enum PETROULESUTILITIESSHARED_EXPORT Type
+    enum PETROULES_UTILITIES_API Type
     {
         Separator,
         File,
@@ -211,7 +211,7 @@ private:
     JumpListLink mLink;
 };
 
-class PETROULESUTILITIESSHARED_EXPORT JumpList
+class PETROULES_UTILITIES_API JumpList
 {
 public:
     JumpList();

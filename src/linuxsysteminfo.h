@@ -8,7 +8,7 @@
 
     Provides information on various aspects of the running Linux distribution.
  */
-class PETROULESUTILITIESSHARED_EXPORT LinuxSystemInfo
+class PETROULES_UTILITIES_API LinuxSystemInfo
 {
 public:
     /*!

@@ -4,7 +4,7 @@
 #include "petroules-utilities-global.h"
 #include "nativefiledialog.h"
 
-class PETROULESUTILITIESSHARED_EXPORT NativeSaveFileDialog : public NativeFileDialog
+class PETROULES_UTILITIES_API NativeSaveFileDialog : public NativeFileDialog
 {
     Q_OBJECT
 

@@ -15,7 +15,7 @@ class NativeWindowInfo;
 
     Provides various methods for interacting with the window manager.
  */
-class PETROULESUTILITIESSHARED_EXPORT WindowManager
+class PETROULES_UTILITIES_API WindowManager
 {
     /*!
         Specifies which windows to include in generated lists.

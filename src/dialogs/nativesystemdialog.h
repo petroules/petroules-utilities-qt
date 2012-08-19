@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT NativeSystemDialog : public QObject
+class PETROULES_UTILITIES_API NativeSystemDialog : public QObject
 {
     Q_OBJECT
 

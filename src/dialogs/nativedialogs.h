@@ -3,7 +3,7 @@
 
 #include "petroules-utilities-global.h"
 
-class PETROULESUTILITIESSHARED_EXPORT NativeDialogs
+class PETROULES_UTILITIES_API NativeDialogs
 {
 public:
     static QMessageBox::StandardButton critical(QWidget *parent, const QString &title, const QString &text, const QString &informativeText = QString(), QMessageBox::StandardButtons buttons = QMessageBox::Ok, QMessageBox::StandardButton defaultButton = QMessageBox::NoButton);
