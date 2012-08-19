@@ -2,8 +2,8 @@ language: cpp
 compiler:
   - gcc
   - clang
-before_script: ./configure.sh
-script: ./make.sh
+before_script: ./.travis/configure.sh
+script: ./.travis/make.sh
 branches:
   only:
     - master
