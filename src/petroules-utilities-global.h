@@ -6,11 +6,8 @@
 // https://binglongx.wordpress.com/2009/01/29/felxible-dllstatic-library-linkage-configurations/
 #if defined(PETROULESUTILITIES_EXPORTS)
 #  define PETROULES_UTILITIES_API Q_DECL_EXPORT
-#  define QT_QTSINGLECOREAPPLICATION_EXPORT Q_DECL_EXPORT
-#  define QT_QTSINGLEAPPLICATION_EXPORT
 #elif defined(PETROULESUTILITIES_IMPORTS)
 #  define PETROULES_UTILITIES_API Q_DECL_IMPORT
-#  define QT_QTSINGLEAPPLICATION_IMPORT
 #else
 #  define PETROULES_UTILITIES_API
 #endif

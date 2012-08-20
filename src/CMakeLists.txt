@@ -16,7 +16,7 @@ if(MSVC)
 endif()
 
 if(BUILD_SHARED_LIBS)
-    add_definitions(-DPETROULESUTILITIES_EXPORTS)
+    add_definitions(-DPETROULESUTILITIES_EXPORTS -DQT_QTSINGLEAPPLICATION_EXPORT)
 endif()
 
 set(TARGET_NAME petroules-utilities)
