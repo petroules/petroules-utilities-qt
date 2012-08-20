@@ -15,7 +15,7 @@ if(MSVC)
     add_definitions(/Zc:wchar_t-)
 endif()
 
-if(BUILD_SHARED_LIBS)
+if(WIN32 AND BUILD_SHARED_LIBS)
     add_definitions(-DPETROULESUTILITIES_EXPORTS -DQT_QTSINGLEAPPLICATION_EXPORT)
 endif()
 
