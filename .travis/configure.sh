@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Clone all submodules
 git submodule update --init --recursive
