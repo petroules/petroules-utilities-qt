@@ -144,3 +144,7 @@ elseif(APPLE)
 
     target_link_libraries("${TARGET_NAME}" ${COCOA_LIBRARY})
 endif()
+
+install(TARGETS "${TARGET_NAME}"
+    DESTINATION lib COMPONENT Runtime
+)
