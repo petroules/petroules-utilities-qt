@@ -2,18 +2,13 @@ function(qt_transform_sources output_var sources)
     # include output directory for the *_ui.h files
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-    # We use this variable to toggle moc processing on and off
-    set(QtUtils_DO_MOC ON)
-
     # If using Qt, runs rcc, uic, moc and lrelease and populates final_sources
     # with the list of actual source files to compile - if not using
     # Qt we'll simply get all files not ending with .qrc, .ui, .h or .ts
     foreach(file ${sources})
-        if("${file}" STREQUAL "<")
-            set(QtUtils_DO_MOC OFF)
-        elseif("${file}" STREQUAL ">")
-            set(QtUtils_DO_MOC ON)
-        else()
+            # CMake has no scope... clear this out
+            set(outfile )
+
             get_filename_component(file_name "${file}" NAME)
 
             # For some very odd reason, CMake's Visual Studio 2010 generator added
@@ -33,7 +28,7 @@ function(qt_transform_sources output_var sources)
                 source_group("Resources\\Icons" FILES "${file}")
             elseif("${file}" MATCHES "(.*)\\.(png|jpg|jpeg|gif|tif|tiff|svg)$")
                 source_group("Resources\\Images" FILES "${file}")
-            elseif("${file}" MATCHES "(.*)\\.(txt|rtf|pdf|url)$" AND NOT "${file_name}" STREQUAL "CMakeLists.txt")
+            elseif("${file}" MATCHES "(.*)\\.(xml|txt|rtf|pdf|url)$" AND NOT "${file_name}" STREQUAL "CMakeLists.txt")
                 source_group("Resources\\Other" FILES "${file}")
             elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.qrc$")
                 qt4_add_resources(outfile "${file}")
@@ -44,8 +39,11 @@ function(qt_transform_sources output_var sources)
             elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.ts$")
                 qt4_add_translation(outfile "${file}")
                 source_group("Qt Translations" FILES "${file}")
-            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.h$" AND QtUtils_DO_MOC)
-                qt4_wrap_cpp(outfile "${file}")
+            elseif(QT4_FOUND AND "${file}" MATCHES "(.*)\\.h$")
+                file(READ "${file}" file_memory_cache)
+                if("${file_memory_cache}" MATCHES "Q_OBJECT")
+                    qt4_wrap_cpp(outfile "${file}")
+                endif()
             endif()
 
             # If we generated anything this round...
@@ -61,7 +59,6 @@ function(qt_transform_sources output_var sources)
                     message("Generated ${outfile_name}")
                 endif()
             endif()
-        endif()
     endforeach()
 
     # Remove any duplicate items from our final source list
