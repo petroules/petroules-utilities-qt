@@ -1,3 +1,6 @@
 [submodule "lib/qtsolutions"]
 	path = lib/qtsolutions
 	url = git://gitorious.org/qt-solutions/qt-solutions.git
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/petroules/solar-cmake.git
