@@ -46,7 +46,6 @@ void IntegratedApplication::preInitialization()
 @interface DockIconClickEventHandler : NSObject
 {
 @public
-    IntegratedApplication* macApplication;
     id eventMonitor;
 }
 
@@ -61,6 +60,7 @@ void IntegratedApplication::preInitialization()
     Q_UNUSED(event);
     Q_UNUSED(replyEvent);
 
+    IntegratedApplication *macApplication = IntegratedApplication::instance();
     if (macApplication)
     {
         macApplication->handleReopen();
@@ -72,7 +72,6 @@ void IntegratedApplication::preInitialization()
 void IntegratedApplication::Private::constructorObjc()
 {
     DockIconClickEventHandler* handler = static_cast<DockIconClickEventHandler*>(dockIconClickEventHandler = [[DockIconClickEventHandler alloc] init]);
-    handler->macApplication = integratedApplication;
     handler->eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^(NSEvent *incomingEvent) {
         return incomingEvent;
     }];

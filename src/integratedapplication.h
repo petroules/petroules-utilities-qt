@@ -49,6 +49,7 @@ public:
     IntegratedApplication(int &argc, char **argv, bool GUIenabled, int = QT_VERSION);
     IntegratedApplication(int &argc, char **argv, Type, int = QT_VERSION);
     ~IntegratedApplication();
+    inline static IntegratedApplication* instance() { return qobject_cast<IntegratedApplication*>(QtSingleApplication::instance()); }
     bool event(QEvent *event);
     QMenuBar* macApplicationMenuBar() const;
     void macSetDockMenu(QMenu *dockMenu);
