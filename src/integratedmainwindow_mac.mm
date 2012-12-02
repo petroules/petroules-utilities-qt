@@ -7,7 +7,11 @@
 
 bool IntegratedMainWindow::Private::isNativeFullScreenEnabled_mac() const
 {
-    return [qt_mac_windowForWidget(window) collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+    if (QSysInfo::QSysInfo::MacintoshVersion >= QSysInfo::MV_10_7)
+        return [qt_mac_windowForWidget(window) collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary;
+#endif
+    return false;
 }
 
 void IntegratedMainWindow::Private::setNativeFullScreenEnabled_mac(bool enable)
@@ -15,27 +19,32 @@ void IntegratedMainWindow::Private::setNativeFullScreenEnabled_mac(bool enable)
     // Make sure that we're not in fullscreen and that we're actually changing the value
     if (!isNativeFullScreen_mac() && isNativeFullScreenEnabled_mac() != enable)
     {
-        NSWindowCollectionBehavior behavior = [qt_mac_windowForWidget(window) collectionBehavior];
-        if (enable)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+        if (QSysInfo::QSysInfo::MacintoshVersion >= QSysInfo::MV_10_7)
         {
-            behavior |= NSWindowCollectionBehaviorFullScreenPrimary;
-        }
-        else
-        {
-            behavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
-        }
+            NSWindowCollectionBehavior behavior = [qt_mac_windowForWidget(window) collectionBehavior];
+            if (enable)
+            {
+                behavior |= NSWindowCollectionBehaviorFullScreenPrimary;
+            }
+            else
+            {
+                behavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+            }
 
-        [qt_mac_windowForWidget(window) setCollectionBehavior: behavior];
+            [qt_mac_windowForWidget(window) setCollectionBehavior: behavior];
+        }
+#endif
     }
 }
 
 bool IntegratedMainWindow::Private::isNativeFullScreen_mac() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
-    return [qt_mac_windowForWidget(window) styleMask] & NSFullScreenWindowMask;
-#else
-    return false;
+    if (QSysInfo::QSysInfo::MacintoshVersion >= QSysInfo::MV_10_7)
+        return [qt_mac_windowForWidget(window) styleMask] & NSFullScreenWindowMask;
 #endif
+    return false;
 }
 
 void IntegratedMainWindow::Private::setNativeFullScreen_mac(bool set)
@@ -45,6 +54,9 @@ void IntegratedMainWindow::Private::setNativeFullScreen_mac(bool set)
     // If the value we want differs from the current, toggle to obtain the desired setting
     if (current != set)
     {
-        [qt_mac_windowForWidget(window) toggleFullScreen: nil];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+        if (QSysInfo::QSysInfo::MacintoshVersion >= QSysInfo::MV_10_7)
+            [qt_mac_windowForWidget(window) toggleFullScreen: nil];
+#endif
     }
 }
