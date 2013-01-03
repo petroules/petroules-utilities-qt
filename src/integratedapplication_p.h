@@ -2,13 +2,10 @@
 #define INTEGRATEDAPPLICATION_P_H
 
 #include "integratedapplication.h"
-#ifdef Q_WS_MAC
-#include "mac/cocoainitializer.h"
+#include "mac/machelpers.h"
 
-#ifdef __OBJC__
-@class DockIconClickEventHandler;
-#endif
-#endif
+class CocoaInitializer;
+OBJC_CLASS(DockIconClickEventHandler);
 
 class IntegratedApplication::Private
 {
@@ -21,9 +18,7 @@ public:
 
     CocoaInitializer *cocoa;
     QMenuBar *macAppMenuBar;
-#ifdef __OBJC__
     DockIconClickEventHandler *dockIconClickEventHandler;
-#endif
 #endif
 
     IntegratedApplication *integratedApplication;
